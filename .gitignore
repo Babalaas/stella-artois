@@ -1,4 +1,5 @@
 .env
+.json
 # Go gitignore template
 # Binaries for programs and plugins
 *.exe

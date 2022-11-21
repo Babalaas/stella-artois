@@ -7,5 +7,5 @@ import (
 )
 
 func RegisterPostRoutes(router *mux.Router) {
-	router.HandleFunc("/api/post/", controllers.CreatePost).Methods("POST")
+	router.HandleFunc("/api/posts/", controllers.CreatePost).Methods("POST")
 }

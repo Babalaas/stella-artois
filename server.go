@@ -8,19 +8,45 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/spf13/viper"
 )
 
-func main() {
-	LoadAppConfig()
+type envConfigs struct {
+	Port             string `mapstructure:"PORT"`
+	ConnectionString string `mapstructure:"CONNECTION_STRING"`
+}
 
-	db.Connect(AppConfig.ConnectionString)
+var EnvConfigs *envConfigs
+
+func InitEnvConfigs() {
+	EnvConfigs = loadEnvVariables()
+}
+
+func loadEnvVariables() (config *envConfigs) {
+	viper.SetConfigFile(".env")
+
+	if err := viper.ReadInConfig(); err != nil {
+		log.Fatal("Error reading env file", err)
+	}
+
+	// Viper unmarshals the loaded env varialbes into the struct
+	if err := viper.Unmarshal(&config); err != nil {
+		log.Fatal(err)
+	}
+	return
+}
+
+func main() {
+
+	InitEnvConfigs()
+	db.Connect(EnvConfigs.ConnectionString)
 	db.Migrate()
 
 	router := mux.NewRouter().StrictSlash(true)
 
 	routes.RegisterPostRoutes(router)
 
-	log.Println(fmt.Sprintf("Starting Server on port %s", AppConfig.Port))
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", AppConfig.Port), router))
+	log.Println(fmt.Sprintf("Starting Server on port %s", EnvConfigs.Port))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", EnvConfigs.Port), router))
 
 }

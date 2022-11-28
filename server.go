@@ -24,7 +24,7 @@ func InitEnvConfigs() {
 }
 
 func loadEnvVariables() (config *EnvConfig) {
-	viper.SetConfigFile(".env")
+	// viper.SetConfigFile(".env")
 
 	viper.AutomaticEnv()
 

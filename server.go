@@ -33,6 +33,9 @@ func loadEnvVariables() (config *envConfigs) {
 	if err := viper.Unmarshal(&config); err != nil {
 		log.Fatal(err)
 	}
+
+	viper.AutomaticEnv()
+
 	return
 }
 

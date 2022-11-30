@@ -3,6 +3,7 @@ module babalaas/web-server
 go 1.19
 
 require (
+
 	github.com/gorilla/mux v1.8.0
 	gorm.io/driver/postgres v1.4.5
 	gorm.io/gorm v1.24.1
@@ -23,4 +24,5 @@ require (
 	github.com/stretchr/testify v1.8.1 // indirect
 	golang.org/x/crypto v0.3.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
+
 )

@@ -1,12 +1,13 @@
 package main
 
 import (
-	"babalaas/web-server/db"
-	"babalaas/web-server/routes"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+
+	"babalaas/web-server/db"
+	"babalaas/web-server/routes"
 
 	"github.com/gorilla/mux"
 )

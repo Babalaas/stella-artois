@@ -1,52 +1,41 @@
 package main
 
 import (
-	"babalaas/web-server/db"
-	"babalaas/web-server/routes"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+
+	"babalaas/web-server/db"
+	"babalaas/web-server/routes"
 
 	"github.com/gorilla/mux"
-	"github.com/spf13/viper"
 )
 
-type envConfigs struct {
-	Port             string `mapstructure:"PORT"`
-	ConnectionString string `mapstructure:"CONNECTION_STRING"`
+type Env struct {
+	Port             string
+	ConnectionString string
 }
 
-var EnvConfigs *envConfigs
+func initEnv() *Env {
 
-func InitEnvConfigs() {
-	EnvConfigs = loadEnvVariables()
-}
-
-func loadEnvVariables() (config *envConfigs) {
-	viper.SetConfigFile(".env")
-
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Error reading env file", err)
+	NewEnv := Env{
+		Port:             os.Getenv("PORT"),
+		ConnectionString: os.Getenv("CONNECTION_STRING"),
 	}
 
-	// Viper unmarshals the loaded env varialbes into the struct
-	if err := viper.Unmarshal(&config); err != nil {
-		log.Fatal(err)
-	}
-	return
+	return &NewEnv
 }
 
 func main() {
-
-	InitEnvConfigs()
-	db.Connect(EnvConfigs.ConnectionString)
+	MyEnv := initEnv()
+	db.Connect(MyEnv.ConnectionString)
 	db.Migrate()
 
 	router := mux.NewRouter().StrictSlash(true)
 
 	routes.RegisterPostRoutes(router)
 
-	log.Println(fmt.Sprintf("Starting Server on port %s", EnvConfigs.Port))
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", EnvConfigs.Port), router))
-
+	log.Println(fmt.Sprintf("Starting Server on port %s", MyEnv.Port))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", MyEnv.Port), router))
 }

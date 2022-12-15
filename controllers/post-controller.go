@@ -2,80 +2,95 @@ package controllers
 
 import (
 	"babalaas/web-server/db"
-	"babalaas/web-server/entities"
-	"encoding/json"
+	"babalaas/web-server/models"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
-// GET /api/posts
-func GetPosts(w http.ResponseWriter, r *http.Request) {
-	var posts []entities.Post
-	db.Instance.Find(&posts)
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(posts)
+type CreatePostInput struct {
+	User_ID       string `json:"user_id" binding:"required"`
+	Collection_ID string `json:"collection_id"`
+	Caption       string `json:"caption" binding:"required"`
+	Location      string `json:"location" binding:"required"`
+	Image         string `json:"image" binding:"required"`
+	Image2        string `json:"image2"`
+	Drink_Number  int    `json:"drink_number" binding:"required"`
 }
 
-// GET /api/posts/{id}
-func GetProductById(w http.ResponseWriter, r *http.Request) {
-	productId := mux.Vars(r)["id"]
-	if checkIfPostExists(productId) == false {
-		json.NewEncoder(w).Encode("Post Not Found!")
-		return
-	}
-	var post entities.Post
-	db.Instance.First(&post, productId)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(post)
+type UpdatePostInput struct {
+	Collection_ID string `json:"collection_id"`
+	Caption       string `json:"caption" binding:"required"`
+	Location      string `json:"location" binding:"required"`
+	Drink_Number  int    `json:"drink_number" binding:"required"`
 }
 
-// POST /api/posts
-func CreatePost(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	var post entities.Post
-	json.NewDecoder(r.Body).Decode(&post)
-	db.Instance.Create(&post)
-	json.NewEncoder(w).Encode(post)
+// GET /posts
+func GetPosts(c *gin.Context) {
+	var posts []models.Post
+	db.GetInstance().Find(&posts)
+	c.JSON(http.StatusOK, gin.H{"data": posts})
 }
 
-// PUT api/posts/{id}
-func UpdatePost(w http.ResponseWriter, r *http.Request) {
-	postId := mux.Vars(r)["id"]
-
-	if checkIfPostExists(postId) == false {
-		json.NewEncoder(w).Encode("Post Not Found!")
+// GET /posts/{id}
+func GetPostById(c *gin.Context) {
+	// Get model if exist
+	var post models.Post
+	if err := db.GetInstance().Where("id = ?", c.Param("id")).First(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
 
-	var post entities.Post
-	db.Instance.First(&post, postId)
-	json.NewDecoder(r.Body).Decode(&post)
-	db.Instance.Save(&post)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(post)
+	c.JSON(http.StatusOK, gin.H{"data": post})
 }
 
-// DELETE /api/posts/{id}
-func DeletePost(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	postId := mux.Vars(r)["id"]
-	if checkIfPostExists(postId) == false {
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode("Post Not Found!")
+// POST /posts
+func CreatePost(c *gin.Context) {
+	// Validate input
+	var input CreatePostInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	var post entities.Post
-	db.Instance.Delete(&post, postId)
-	json.NewEncoder(w).Encode("Post Deleted Successfully!")
+
+	// Create post
+	post := models.Post{User_ID: input.User_ID, Collection_ID: input.Collection_ID, Caption: input.Caption, Location: input.Caption, Image: input.Image, Image2: input.Image2, Drink_Number: input.Drink_Number}
+	db.GetInstance().Create(&post)
+
+	c.JSON(http.StatusCreated, gin.H{"data": post})
 }
 
-func checkIfPostExists(postId string) bool {
-	var post entities.Post
-	db.Instance.First(&post, postId)
-	if post.ID == 0 {
-		return false
+// PUT /posts/{id}
+func UpdatePost(c *gin.Context) {
+	// Get model if exist
+	var post models.Post
+	if err := db.GetInstance().Where("id = ?", c.Param("id")).First(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Post record not found!"})
+		return
 	}
-	return true
+
+	// Validate input
+	var input UpdatePostInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	db.GetInstance().Model(&post).Updates(input)
+
+	c.JSON(http.StatusOK, gin.H{"data": post})
+}
+
+// DELETE /posts/{id}
+func DeletePost(c *gin.Context) {
+	// Get model if exist
+	var post models.Post
+	if err := db.GetInstance().Where("id = ?", c.Param("id")).First(&post).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	db.GetInstance().Delete(&post)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
 }

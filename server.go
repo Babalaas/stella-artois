@@ -9,7 +9,7 @@ import (
 	"babalaas/web-server/db"
 	"babalaas/web-server/routes"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
 type Env struct {
@@ -32,7 +32,7 @@ func main() {
 	db.Connect(MyEnv.ConnectionString)
 	db.Migrate()
 
-	router := mux.NewRouter().StrictSlash(true)
+	router := gin.Default()
 
 	routes.RegisterPostRoutes(router)
 

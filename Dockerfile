@@ -21,7 +21,7 @@ RUN CGO_ENABLED=0 go test -v
 RUN go build -o ./out/web-server .
 
 # Start fresh from a smaller image
-FROM alpine:3.9 
+FROM alpine:latest 
 RUN apk add ca-certificates
 
 COPY --from=build_base /tmp/web-server/out/web-server /app/web-server

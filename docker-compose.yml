@@ -5,6 +5,7 @@ services:
   # App Service
   app:
     # Configuration for building the docker image for the service
+    container_name: stella-artois
     build:
       context: . # Use an image built from the specified dockerfile in the current directory.
       dockerfile: Dockerfile

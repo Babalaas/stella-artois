@@ -1,4 +1,4 @@
-module babalaas/web-server
+module babalaas/stella-artois
 
 go 1.19
 

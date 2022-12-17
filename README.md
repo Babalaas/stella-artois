@@ -1,5 +1,5 @@
-# Babalaas Web Server
-The web server for the Babalaas mobile application.  
+# Babalaas API Server
+The API server for the Babalaas mobile application.  
 - Written in Go using modules
 - REST API 
 - CRUD functionality for the Babalaas entities

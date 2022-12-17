@@ -1,11 +1,12 @@
 package controllers
 
 import (
-	"babalaas/web-server/db"
-	"babalaas/web-server/models"
+	"babalaas/stella-artois/db"
+	"babalaas/stella-artois/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type CreatePostInput struct {
@@ -54,7 +55,19 @@ func CreatePost(c *gin.Context) {
 	}
 
 	// Create post
-	post := models.Post{User_ID: input.User_ID, Collection_ID: input.Collection_ID, Caption: input.Caption, Location: input.Caption, Image: input.Image, Image2: input.Image2, Drink_Number: input.Drink_Number}
+	post := models.Post{
+		ID:            "",
+		User_ID:       input.User_ID,
+		Collection_ID: uuid.Nil.String(),
+		Caption:       input.Caption,
+		Location:      input.Location,
+		Created:       "",
+		Image:         input.Image,
+		Image2:        input.Image2,
+		Drink_Number:  input.Drink_Number,
+		Like_Count:    0,
+	}
+
 	db.GetInstance().Create(&post)
 
 	c.JSON(http.StatusCreated, gin.H{"data": post})

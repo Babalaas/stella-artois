@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"babalaas/web-server/controllers"
+	"babalaas/stella-artois/controllers"
 
 	"github.com/gin-gonic/gin"
 )

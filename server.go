@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
-	"babalaas/web-server/db"
-	"babalaas/web-server/routes"
+	"babalaas/stella-artois/db"
+	"babalaas/stella-artois/routes"
 
 	"github.com/gin-gonic/gin"
 )
@@ -34,6 +34,7 @@ func main() {
 
 	router := gin.Default()
 
+	router.RedirectTrailingSlash = false
 	routes.RegisterPostRoutes(router)
 
 	log.Println(fmt.Sprintf("Starting Server on port %s", MyEnv.Port))

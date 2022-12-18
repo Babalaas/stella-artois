@@ -5,12 +5,33 @@ services:
   # App Service
   app:
     # Configuration for building the docker image for the service
-    container_name: stella-artois
+    container_name: dev-stella
     build:
-      context: . # Use an image built from the specified dockerfile in the current directory.
       dockerfile: Dockerfile
     ports:
       - "8080:8080" # Forward the exposed port 8080 on the container to port 8080 on the host machine
-    restart: unless-stopped
+    restart: on-failure
     env_file: # Pass environment variables to the service
       - ./.env
+    depends_on:
+      - dev-postgres
+    networks:
+      - backend
+  dev-postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=admin 
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+      - DATABASE_HOST=127.0.0.1 
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+    networks:
+      - backend
+# Networks to be created to facilitate communication between containers
+networks:
+  backend:
+    driver: bridge

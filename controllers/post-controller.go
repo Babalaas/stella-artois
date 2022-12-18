@@ -4,6 +4,7 @@ import (
 	"babalaas/stella-artois/db"
 	"babalaas/stella-artois/models"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -57,11 +58,11 @@ func CreatePost(c *gin.Context) {
 	// Create post
 	post := models.Post{
 		ID:            "",
-		User_ID:       input.User_ID,
+		Profile_ID:    input.User_ID,
 		Collection_ID: uuid.Nil.String(),
 		Caption:       input.Caption,
 		Location:      input.Location,
-		Created:       "",
+		Created:       time.Time{},
 		Image:         input.Image,
 		Image2:        input.Image2,
 		Drink_Number:  input.Drink_Number,
@@ -84,12 +85,20 @@ func UpdatePost(c *gin.Context) {
 
 	// Validate input
 	var input UpdatePostInput
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	db.GetInstance().Model(&post).Updates(input)
+	newInput := models.Post{
+		Collection_ID: input.Collection_ID,
+		Caption:       input.Caption,
+		Location:      input.Location,
+		Drink_Number:  input.Drink_Number,
+	}
+
+	db.GetInstance().Model(&post).Updates(newInput)
 
 	c.JSON(http.StatusOK, gin.H{"data": post})
 }

@@ -32,4 +32,4 @@ EXPOSE 8080
 # Environment Variables
 
 # Run the binary program produced by `go install`
-CMD ["/app/web-server"]
+CMD ["/app/stella-artois"]

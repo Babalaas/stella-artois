@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"os"
 
-	"babalaas/web-server/db"
-	"babalaas/web-server/routes"
+	"babalaas/stella-artois/db"
+	"babalaas/stella-artois/routes"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
 type Env struct {
@@ -32,8 +32,9 @@ func main() {
 	db.Connect(MyEnv.ConnectionString)
 	db.Migrate()
 
-	router := mux.NewRouter().StrictSlash(true)
+	router := gin.Default()
 
+	router.RedirectTrailingSlash = false
 	routes.RegisterPostRoutes(router)
 
 	log.Println(fmt.Sprintf("Starting Server on port %s", MyEnv.Port))

@@ -2,20 +2,6 @@ version: "3.9"
 
 # Define services
 services:
-  dev-postgres:
-    image: postgres:latest
-    container_name: postgres
-    environment:
-      - POSTGRES_USER=admin 
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=postgres
-      - DATABASE_HOST=127.0.0.1 
-    ports:
-      - '5432:5432'
-    volumes:
-      - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
-    networks:
-      - backend
   # App Service
   app:
     # Configuration for building the docker image for the service
@@ -28,10 +14,28 @@ services:
     env_file: # Pass environment variables to the service
       - ./.env
     depends_on:
-      - dev-postgres
+      dev-postgres:
+        condition: service_healthy
     networks:
       - backend
-  
+  dev-postgres:
+    image: postgres:latest
+    container_name: dev-postgres
+    environment:
+      - POSTGRES_USER=admin 
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
 # Networks to be created to facilitate communication between containers
 networks:
   backend:

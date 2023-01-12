@@ -13,6 +13,7 @@ var instance *gorm.DB
 var err error
 
 func Connect(connectionString string) {
+
 	instance, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,

@@ -22,7 +22,7 @@ type Post struct {
 }
 
 type PostService interface {
-	Get(ctx context.Context, uid uuid.UUID) (post Post, err error)
+	GetById(ctx context.Context, uid uuid.UUID) (post Post, err error)
 	AddToCollection(ctx context.Context, post *Post) (err error)
 }
 

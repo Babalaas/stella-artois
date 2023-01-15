@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
 
 	"babalaas/stella-artois/db"
 	"babalaas/stella-artois/handler"
@@ -33,6 +32,7 @@ func initEnv() *Env {
 func main() {
 	MyEnv := initEnv()
 	db.Connect(MyEnv.ConnectionString)
+
 	db.Migrate()
 
 	router, err := inject()
@@ -43,32 +43,6 @@ func main() {
 
 	log.Println(fmt.Sprintf("Starting Server on port %s", MyEnv.Port))
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", MyEnv.Port), router))
-
-	server := &http.Server{
-		Addr:    fmt.Sprintf(":%v", MyEnv.Port),
-		Handler: router,
-	}
-
-	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt)
-
-	go func() {
-		<-quit
-		log.Println("receive interrupt signal")
-		if err := server.Close(); err != nil {
-			log.Fatal("Server Close:", err)
-		}
-	}()
-
-	if err := server.ListenAndServe(); err != nil {
-		if err == http.ErrServerClosed {
-			log.Println("Server closed under request")
-		} else {
-			log.Fatal("Server closed unexpect")
-		}
-	}
-
-	log.Println("Server exiting")
 }
 
 func inject() (*gin.Engine, error) {
@@ -80,10 +54,16 @@ func inject() (*gin.Engine, error) {
 
 	// handler layer
 	router := gin.Default()
-	router.RedirectTrailingSlash = false
-	baseUrl := "/api/v1"
+	//router.Use(middleware.Logger())
 
-	handler.NewHandler(router, postService, baseUrl)
+	router.GET("/ping", func(c *gin.Context) {
+		c.String(200, "pong")
+	})
+
+	router.RedirectTrailingSlash = false
+	//baseUrl := "/api/v1"
+
+	handler.NewHandler(router, postService, "/")
 
 	return router, nil
 }

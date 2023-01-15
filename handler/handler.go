@@ -25,5 +25,5 @@ func NewHandler(router *gin.Engine, postService model.PostService, baseURL strin
 
 	postRouteGroup := router.Group("/posts")
 
-	postRouteGroup.GET("/:id", handler.GetPostById)
+	postRouteGroup.GET("/:id", handler.GetPostByID)
 }

@@ -9,12 +9,12 @@ import (
 )
 
 // GetPostByID cleans the id parameter and calls the PostService to get a post by based on the parameter (GET /{id})
-func (handler *Handler) GetPostById(c *gin.Context) {
-	reqId := c.Param("id")
+func (handler *Handler) GetPostByID(c *gin.Context) {
+	reqID := c.Param("id")
 
-	uid := uuid.Must(uuid.Parse(reqId))
+	uid := uuid.Must(uuid.Parse(reqID))
 	ctx := c.Request.Context()
-	post, err := handler.PostService.GetById(ctx, uid)
+	post, err := handler.PostService.GetByID(ctx, uid)
 
 	if err != nil {
 		log.Panicf("Unable to find post")

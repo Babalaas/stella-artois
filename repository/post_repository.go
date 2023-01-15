@@ -26,7 +26,7 @@ func (repo *postRepository) GetAll(ctx context.Context) (posts []model.Post, err
 	panic("unimplemented")
 }
 
-func (repo *postRepository) GetById(ctx context.Context, uid uuid.UUID) (post model.Post, err error) {
+func (repo *postRepository) GetByID(ctx context.Context, uid uuid.UUID) (post model.Post, err error) {
 	var resPost model.Post
 	if resErr := repo.DB.Where("id = ?", uid).First(&resPost).Error; resErr != nil {
 		log.Panic("Post with id not found.")

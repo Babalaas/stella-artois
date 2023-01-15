@@ -12,8 +12,8 @@ type postService struct {
 }
 
 // Get implements models.PostService
-func (service *postService) GetById(ctx context.Context, uid uuid.UUID) (post model.Post, err error) {
-	resPost, resErr := service.PostRepository.GetById(ctx, uid)
+func (service *postService) GetByID(ctx context.Context, uid uuid.UUID) (post model.Post, err error) {
+	resPost, resErr := service.PostRepository.GetByID(ctx, uid)
 	return resPost, resErr
 }
 

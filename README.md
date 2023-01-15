@@ -1,19 +1,17 @@
-# Babalaas API Server
-The API server for the Babalaas mobile application.  
+# Babalaas Application Server
+The server for the Babalaas mobile application.  
 - Written in Go using modules
-- REST API 
-- CRUD functionality for the Babalaas entities
 - Connects to PostgreSQL container with test data
 
 ## Running Locally
-1. Be sure to have Go 1.19+ installed 
+1. Be sure to have Go 1.19, Docker, and Docker Compose installed 
 2. Clone this repository
-3. Within the web-server directory execute the following command:
+3. Within the stella-artois directory execute the following command:
     ```BASH
-    $ docker-compose up
+    $ docker-compose up --build
     ```
-4. You can access the API through the following address: http://localhost:8080/api/
-5. Verify API functionality by performing the following GET command and recieving a JSON response: http://localhost:8080/api/posts
+4. You can access the server through the following address: http://localhost:8080/
+5. Verify server functionality by performing the following GET command and recieving a "pong" response: http://localhost:8080/ping
 
 ## .env File Template
 ```text

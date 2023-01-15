@@ -13,22 +13,33 @@ services:
     restart: on-failure
     env_file: # Pass environment variables to the service
       - ./.env
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 3
+        window: 60s
     depends_on:
-      - dev-postgres
+      dev-postgres:
+        condition: service_healthy
     networks:
       - backend
   dev-postgres:
     image: postgres:latest
-    container_name: postgres
+    container_name: dev-postgres
     environment:
-      - POSTGRES_USER=admin 
+      - POSTGRES_USER=root 
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=postgres
-      - DATABASE_HOST=127.0.0.1 
+      - POSTGRES_DB=babalaas
     ports:
       - '5432:5432'
     volumes:
       - ./sql/data.sql:/docker-entrypoint-initdb.d/data.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d postgres -U root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - backend
 # Networks to be created to facilitate communication between containers

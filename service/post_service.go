@@ -21,7 +21,7 @@ func (service *postService) AddToCollection(ctx context.Context, post *model.Pos
 	panic("unimplemented")
 }
 
-// can replace the parameter list with a PostServiceConfig parameter object
+// NewPostService creates a Post Service with a PostRepository attribute
 func NewPostService(postRepo *model.PostRepository) model.PostService {
 	return &postService{
 		PostRepository: *postRepo,

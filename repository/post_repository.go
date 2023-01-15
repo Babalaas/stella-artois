@@ -39,6 +39,7 @@ func (repo *postRepository) Update(ctx context.Context, post *model.Post) (err e
 	panic("unimplemented")
 }
 
+// NewPostRepository creates a new PostRepository with the server's database instance
 func NewPostRepository() model.PostRepository {
 	return &postRepository{
 		DB: db.GetInstance(),

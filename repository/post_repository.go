@@ -2,7 +2,7 @@ package repository
 
 import (
 	"babalaas/stella-artois/db"
-	"babalaas/stella-artois/models"
+	"babalaas/stella-artois/model"
 	"context"
 	"log"
 
@@ -14,7 +14,7 @@ type postRepository struct {
 	DB *gorm.DB
 }
 
-func (repo *postRepository) Create(ctx context.Context, post *models.Post) (err error) {
+func (repo *postRepository) Create(ctx context.Context, post *model.Post) (err error) {
 	panic("unimplemented")
 }
 
@@ -22,12 +22,12 @@ func (repo *postRepository) Delete(ctx context.Context, uid uuid.UUID) (err erro
 	panic("unimplemented")
 }
 
-func (repo *postRepository) GetAll(ctx context.Context) (posts []models.Post, err error) {
+func (repo *postRepository) GetAll(ctx context.Context) (posts []model.Post, err error) {
 	panic("unimplemented")
 }
 
-func (repo *postRepository) GetById(ctx context.Context, uid uuid.UUID) (post models.Post, err error) {
-	var resPost models.Post
+func (repo *postRepository) GetById(ctx context.Context, uid uuid.UUID) (post model.Post, err error) {
+	var resPost model.Post
 	if resErr := repo.DB.Where("id = ?", uid).First(&resPost).Error; resErr != nil {
 		log.Panic("Post with id not found.")
 		return resPost, resErr
@@ -35,11 +35,11 @@ func (repo *postRepository) GetById(ctx context.Context, uid uuid.UUID) (post mo
 	return resPost, nil
 }
 
-func (repo *postRepository) Update(ctx context.Context, post *models.Post) (err error) {
+func (repo *postRepository) Update(ctx context.Context, post *model.Post) (err error) {
 	panic("unimplemented")
 }
 
-func NewPostRepository() models.PostRepository {
+func NewPostRepository() model.PostRepository {
 	return &postRepository{
 		DB: db.GetInstance(),
 	}

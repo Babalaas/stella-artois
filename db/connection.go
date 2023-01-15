@@ -1,7 +1,7 @@
 package db
 
 import (
-	"babalaas/stella-artois/models"
+	"babalaas/stella-artois/model"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -28,9 +28,9 @@ func Connect(connectionString string) {
 	log.Println("Connected to Database...")
 }
 
-// Keeps models up to date with database instance
+// Keeps model up to date with database instance
 func Migrate() {
-	instance.AutoMigrate(&models.Post{})
+	instance.AutoMigrate(&model.Post{})
 	log.Println("Database Migration Completed...")
 }
 

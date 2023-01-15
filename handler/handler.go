@@ -1,14 +1,14 @@
 package handler
 
 import (
-	"babalaas/stella-artois/models"
+	"babalaas/stella-artois/model"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Handler holds required services for handlers to function
 type Handler struct {
-	PostService models.PostService
+	PostService model.PostService
 }
 
 // Config holds services injected on handler initilization
@@ -18,7 +18,7 @@ type Config struct {
 }
 
 // NewHandler creates a new Handler struct with the required services and creates necessary route groups (can replace parameters with Config parameter object)
-func NewHandler(router *gin.Engine, postService models.PostService, baseURL string) {
+func NewHandler(router *gin.Engine, postService model.PostService, baseURL string) {
 	handler := &Handler{
 		PostService: postService,
 	}

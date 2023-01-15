@@ -14,27 +14,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Env struct {
+type envConfig struct {
 	Port             string
 	ConnectionString string
-}
-
-func initEnv() *Env {
-
-	NewEnv := Env{
-		Port:             os.Getenv("PORT"),
-		ConnectionString: os.Getenv("CONNECTION_STRING"),
-	}
-
-	return &NewEnv
+	GinMode          string
 }
 
 func main() {
-	MyEnv := initEnv()
-	db.Connect(MyEnv.ConnectionString)
+	myEnv := initEnvConfig()
+	db.Connect(myEnv.ConnectionString)
 	db.Migrate()
 
-	gin.SetMode(os.Getenv("GIN_MODE"))
+	gin.SetMode(myEnv.GinMode)
 
 	router, err := inject()
 
@@ -42,8 +33,8 @@ func main() {
 		log.Fatal("Failure injecting data sources")
 	}
 
-	log.Printf("Starting Server on port %s", MyEnv.Port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", MyEnv.Port), router))
+	log.Printf("Starting Server on port %s", myEnv.Port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", myEnv.Port), router))
 }
 
 func inject() (*gin.Engine, error) {
@@ -55,16 +46,23 @@ func inject() (*gin.Engine, error) {
 
 	// handler layer
 	router := gin.Default()
-	//router.Use(middleware.Logger())
 
 	router.GET("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
 	})
 
 	router.RedirectTrailingSlash = false
-	//baseUrl := "/api/v1"
 
 	handler.NewHandler(router, postService, "/")
 
 	return router, nil
+}
+
+func initEnvConfig() *envConfig {
+	newEnv := envConfig{
+		Port:             os.Getenv("PORT"),
+		ConnectionString: os.Getenv("CONNECTION_STRING"),
+		GinMode:          os.Getenv("GIN_MODE"),
+	}
+	return &newEnv
 }

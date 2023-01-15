@@ -42,7 +42,7 @@ func main() {
 		log.Fatal("Failure injecting data sources")
 	}
 
-	log.Println(fmt.Sprintf("Starting Server on port %s", MyEnv.Port))
+	log.Printf("Starting Server on port %s", MyEnv.Port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", MyEnv.Port), router))
 }
 

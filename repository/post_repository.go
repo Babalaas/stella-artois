@@ -28,7 +28,7 @@ func (repo *postRepository) GetAll(ctx context.Context) (posts []models.Post, er
 
 func (repo *postRepository) GetById(ctx context.Context, uid uuid.UUID) (post models.Post, err error) {
 	var resPost models.Post
-	if resErr := repo.DB.Where("id = ?", uid).First(&resPost).Error; err != nil {
+	if resErr := repo.DB.Where("id = ?", uid).First(&resPost).Error; resErr != nil {
 		log.Panic("Post with id not found.")
 		return resPost, resErr
 	}

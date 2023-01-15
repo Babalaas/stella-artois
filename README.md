@@ -17,4 +17,5 @@ The server for the Babalaas mobile application.
 ```text
 CONNECTION_STRING="postgres://{user}:{password}@{hostname}:{port}/{database-name}"
 PORT=8080
+GIN_MODE="debug"
 ```

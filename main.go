@@ -32,8 +32,9 @@ func initEnv() *Env {
 func main() {
 	MyEnv := initEnv()
 	db.Connect(MyEnv.ConnectionString)
-
 	db.Migrate()
+
+	gin.SetMode(os.Getenv("GIN_MODE"))
 
 	router, err := inject()
 

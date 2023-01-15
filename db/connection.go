@@ -1,7 +1,7 @@
 package db
 
 import (
-	"babalaas/stella-artois/models"
+	"babalaas/stella-artois/model"
 	"log"
 
 	"gorm.io/driver/postgres"
@@ -12,6 +12,7 @@ import (
 var instance *gorm.DB
 var err error
 
+// Connect opens a session with a PostgreSQL database using the passed connection string
 func Connect(connectionString string) {
 
 	instance, err = gorm.Open(postgres.Open(connectionString), &gorm.Config{
@@ -27,11 +28,13 @@ func Connect(connectionString string) {
 	log.Println("Connected to Database...")
 }
 
+// Migrate keeps model up to date with database instance
 func Migrate() {
-	instance.AutoMigrate(&models.Post{})
+	instance.AutoMigrate(&model.Post{})
 	log.Println("Database Migration Completed...")
 }
 
+// GetInstance returns current database instance
 func GetInstance() *gorm.DB {
 	return instance
 }

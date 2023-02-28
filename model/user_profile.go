@@ -1,10 +1,10 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
-	"golang.org/x/net/context"
 	"gorm.io/gorm"
 )
 

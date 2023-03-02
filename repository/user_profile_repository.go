@@ -6,6 +6,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -14,12 +15,15 @@ type userProfileRepository struct {
 }
 
 // Create implements model.UserProfileRepository
-func (repo *userProfileRepository) Create(ctx context.Context, userProfile *model.UserProfile) (err error) {
-	if resErr := repo.DB.Create(&userProfile).Error; resErr != nil {
+func (repo *userProfileRepository) Create(ctx context.Context, userProfile *model.UserProfile) (uuid.UUID, error) {
+	result := repo.DB.Create(&userProfile)
+
+	if result.Error != nil {
 		log.Panic("Could not create new User Profile.")
-		return resErr
+		return uuid.Nil, result.Error
 	}
-	return nil
+
+	return userProfile.ID, nil
 }
 
 // NewPostRepository creates a new PostRepository with the server's database instance

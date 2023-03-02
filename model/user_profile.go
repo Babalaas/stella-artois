@@ -21,11 +21,11 @@ type UserProfile struct {
 }
 
 type UserProfileService interface {
-	Register(ctx context.Context, userProfile *UserProfile) (err error)
+	Register(ctx context.Context, userProfile *UserProfile) (id uuid.UUID, err error)
 }
 
 type UserProfileRepository interface {
-	Create(ctx context.Context, userProfile *UserProfile) (err error)
+	Create(ctx context.Context, userProfile *UserProfile) (id uuid.UUID, err error)
 }
 
 // BeforeCreate is a hook called to initialize user_profile fields to default values

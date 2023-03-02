@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
@@ -81,11 +83,13 @@ func TestUserProfileRepository_Create_Success(t *testing.T) {
 
 		mock.ExpectCommit()
 
-		err := repo.Create(ctx, tc.args.userProfile)
+		id, err := repo.Create(ctx, tc.args.userProfile)
 		if (err != nil) != tc.wantErr {
 			t.Errorf("UserProfileRepository.Create() error = %v, wantErr %v", err, tc.wantErr)
 			return
 		}
+
+		assert.NotEqualValues(t, uuid.Nil, id)
 	})
 }
 

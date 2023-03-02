@@ -38,11 +38,18 @@ func main() {
 }
 
 func inject() (*gin.Engine, error) {
-	// repo layer
+	// repositories
 	postRepo := repository.NewPostRepository()
+	userProfileRepo := repository.NewUserProfileRepository()
 
-	// service layer
+	// service configs
+	userProfileConfig := &service.UPSConfig{
+		UserProfileRepository: userProfileRepo,
+	}
+
+	// services
 	postService := service.NewPostService(&postRepo)
+	userProfileService := service.NewUserProfileService(userProfileConfig)
 
 	// handler layer
 	router := gin.Default()
@@ -53,7 +60,14 @@ func inject() (*gin.Engine, error) {
 
 	router.RedirectTrailingSlash = false
 
-	handler.NewHandler(router, postService, "/")
+	handlerConfig := &handler.Config{
+		Router:             router,
+		BaseURL:            "",
+		PostService:        postService,
+		UserProfileService: userProfileService,
+	}
+
+	handler.NewHandler(handlerConfig)
 
 	return router, nil
 }

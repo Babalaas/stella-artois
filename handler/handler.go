@@ -8,22 +8,30 @@ import (
 
 // Handler holds required services for handlers to function
 type Handler struct {
-	PostService model.PostService
+	PostService        model.PostService
+	UserProfileService model.UserProfileService
 }
 
 // Config holds services injected on handler initilization
 type Config struct {
 	Router  *gin.Engine
 	BaseURL string
+
+	PostService        model.PostService
+	UserProfileService model.UserProfileService
 }
 
-// NewHandler creates a new Handler struct with the required services and creates necessary route groups (can replace parameters with Config parameter object)
-func NewHandler(router *gin.Engine, postService model.PostService, baseURL string) {
+// NewHandler is a factory function which a new Handler struct
+// with the required services and creates necessary route groups
+func NewHandler(config *Config) {
 	handler := &Handler{
-		PostService: postService,
+		PostService:        config.PostService,
+		UserProfileService: config.UserProfileService,
 	}
 
-	postRouteGroup := router.Group("/posts")
-
+	postRouteGroup := config.Router.Group("/posts")
 	postRouteGroup.GET("/:id", handler.GetPostByID)
+
+	userProfileRouteGroup := config.Router.Group("/user-profiles")
+	userProfileRouteGroup.POST("", handler.Register)
 }

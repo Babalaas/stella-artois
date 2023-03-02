@@ -34,7 +34,7 @@ func (handler *Handler) Register(c *gin.Context) {
 		Password:    req.Password,
 	}
 
-	registerErr := handler.UserProfileService.Register(c.Request.Context(), req_user_profile)
+	resId, registerErr := handler.UserProfileService.Register(c.Request.Context(), req_user_profile)
 
 	if registerErr != nil {
 		log.Panicf("Failed to register user profile: %v\n", registerErr)
@@ -45,6 +45,6 @@ func (handler *Handler) Register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"created": "created",
+		"id": resId,
 	})
 }

@@ -26,14 +26,15 @@ func (repo *userProfileRepository) Create(ctx context.Context, userProfile *mode
 	return userProfile.ID, nil
 }
 
-// NewPostRepository creates a new PostRepository with the server's database instance
+// NewUserProfileRepository creates a new PostRepository with the server's database instance
 func NewUserProfileRepository() model.UserProfileRepository {
 	return &userProfileRepository{
 		DB: db.GetInstance(),
 	}
 }
 
-// NewPostRepository creates a new PostRepository with the server's database instance
+// NewTestUserProfileRepository creates a new gorm.DB
+// which is used with a sqlmock
 func NewTestUserProfileRepository(db *gorm.DB) model.UserProfileRepository {
 	return &userProfileRepository{
 		DB: db,

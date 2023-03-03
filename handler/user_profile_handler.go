@@ -20,10 +20,12 @@ type registerRequest struct {
 	Password    string    `json:"password" binding:"required,password"`
 }
 
+// Register handles the HTTP request to create one new user_profile entity
+// and store it in the database.
 func (handler *Handler) Register(c *gin.Context) {
 	var req registerRequest
 
-	req_user_profile := &model.UserProfile{
+	reqUserProfile := &model.UserProfile{
 		DisplayName: req.DisplayName,
 		FirstName:   req.FirstName,
 		LastName:    req.LastName,
@@ -34,7 +36,7 @@ func (handler *Handler) Register(c *gin.Context) {
 		Password:    req.Password,
 	}
 
-	resId, registerErr := handler.UserProfileService.Register(c.Request.Context(), req_user_profile)
+	resID, registerErr := handler.UserProfileService.Register(c.Request.Context(), reqUserProfile)
 
 	if registerErr != nil {
 		log.Panicf("Failed to register user profile: %v\n", registerErr)
@@ -45,6 +47,6 @@ func (handler *Handler) Register(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"id": resId,
+		"id": resID,
 	})
 }

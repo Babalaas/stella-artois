@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// UserProfile entity
 type UserProfile struct {
 	ID          uuid.UUID `gorm:"type:uuid;primaryKey"`
 	DisplayName string    `gorm:"type:varchar(30);not null"`
@@ -20,10 +21,12 @@ type UserProfile struct {
 	Password    string    `gorm:"type:text"`
 }
 
+// UserProfileService definition
 type UserProfileService interface {
 	Register(ctx context.Context, userProfile *UserProfile) (id uuid.UUID, err error)
 }
 
+// UserProfileRepository definition
 type UserProfileRepository interface {
 	Create(ctx context.Context, userProfile *UserProfile) (id uuid.UUID, err error)
 }

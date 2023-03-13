@@ -38,9 +38,10 @@ func main() {
 }
 
 func inject() (*gin.Engine, error) {
+
 	// repositories
 	postRepo := repository.NewPostRepository()
-	userProfileRepo := repository.NewUserProfileRepository()
+	userProfileRepo := repository.NewUserProfileRepository(db.GetInstance())
 
 	// service configs
 	userProfileConfig := &service.UPSConfig{

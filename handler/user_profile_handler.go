@@ -2,6 +2,7 @@ package handler
 
 import (
 	"babalaas/stella-artois/model"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -9,21 +10,31 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// JSONBirthdate is the type alias for recieving date data from HTTP requests as JSON
+// Allows for custom Marshalling and Unmarshalling
+type JSONBirthdate time.Time
+
 type registerRequest struct {
-	DisplayName string    `json:"display_name" binding:"required,display_name"`
-	FirstName   string    `json:"first_name" binding:"required,first_name"`
-	LastName    string    `json:"last_name" binding:"required,last_name"`
-	Email       string    `json:"email" binding:"required,email"`
-	Phone       string    `json:"phone" binding:"required,phone"`
-	Gender      string    `json:"gender" binding:"gender"`
-	Birthdate   time.Time `json:"birthdate" binding:"required,birthdate"`
-	Password    string    `json:"password" binding:"required,password"`
+	DisplayName string    `json:"display_name" binding:"required"`
+	FirstName   string    `json:"first_name" binding:"required"`
+	LastName    string    `json:"last_name" binding:"required"`
+	Email       string    `json:"email" binding:"required"`
+	Phone       string    `json:"phone" binding:"required"`
+	Gender      string    `json:"gender" binding:"required"`
+	Birthdate   time.Time `json:"birthdate" binding:"required"`
+	Password    string    `json:"password" binding:"required"`
 }
 
 // Register handles the HTTP request to create one new user_profile entity
 // and store it in the database.
 func (handler *Handler) Register(c *gin.Context) {
 	var req registerRequest
+
+	if bindErr := c.ShouldBind(&req); bindErr != nil {
+		log.Panicf("Failed to bind user profile JSON input: %v\n", bindErr)
+		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
+		return
+	}
 
 	reqUserProfile := &model.UserProfile{
 		DisplayName: req.DisplayName,

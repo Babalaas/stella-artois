@@ -4,91 +4,78 @@ import (
 	"babalaas/stella-artois/model"
 	"babalaas/stella-artois/repository"
 	"context"
+	"regexp"
 	"testing"
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 )
 
-type args struct {
-	ctx         context.Context
-	userProfile *model.UserProfile
-}
-
-type test_case struct {
-	name    string
-	args    args
-	wantErr bool
-}
-
-func TestUserProfileRepository_Create_Success(t *testing.T) {
-	db, mock, err := sqlmock.New()
+func Test_Create(t *testing.T) {
+	// Set up test dependencies
+	db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
 	if err != nil {
-		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+		t.Fatalf("error setting up test dependencies: %v", err)
 	}
 	defer db.Close()
 
 	gormDB, err := gorm.Open(postgres.New(postgres.Config{
-		Conn: db,
-	}), &gorm.Config{NamingStrategy: schema.NamingStrategy{SingularTable: true}})
-	if err != nil {
-		t.Fatalf("an error '%s' was not expected when opening a gorm database connection", err)
-	}
-
-	tc_args := args{
-		ctx: context.Background(),
-		userProfile: &model.UserProfile{
-			DisplayName: "JohnDoe",
-			FirstName:   "John",
-			LastName:    "Doe",
-			Email:       "johndoe@example.com",
-			Phone:       "1234567890",
-			Gender:      "male",
-			Birthdate:   time.Date(1990, 10, 10, 0, 0, 0, 0, time.UTC),
-			Password:    "password",
-		},
-	}
-
-	tc := test_case{
-		name:    "User_Profile_Create_Success",
-		args:    tc_args,
-		wantErr: false,
-	}
-
-	repo := repository.NewTestUserProfileRepository(gormDB)
-
-	t.Run(tc.name, func(t *testing.T) {
-		ctx, cancel := context.WithTimeout(tc_args.ctx, time.Second)
-		defer cancel()
-
-		mock.ExpectBegin()
-		mock.ExpectExec(`INSERT INTO "user_profile"`).
-			WithArgs(
-				sqlmock.AnyArg(),
-				tc_args.userProfile.DisplayName,
-				tc_args.userProfile.FirstName,
-				tc_args.userProfile.LastName,
-				tc_args.userProfile.Email,
-				tc_args.userProfile.Phone,
-				tc_args.userProfile.Gender,
-				tc_args.userProfile.Birthdate,
-				tc_args.userProfile.Password,
-			).
-			WillReturnResult(sqlmock.NewResult(1, 1))
-
-		mock.ExpectCommit()
-
-		id, err := repo.Create(ctx, tc.args.userProfile)
-		if (err != nil) != tc.wantErr {
-			t.Errorf("UserProfileRepository.Create() error = %v, wantErr %v", err, tc.wantErr)
-			return
-		}
-
-		assert.NotEqualValues(t, uuid.Nil, id)
+		DriverName:           "postgres",
+		DSN:                  "",
+		PreferSimpleProtocol: true,
+		WithoutReturning:     false,
+		Conn:                 db,
+	}), &gorm.Config{
+		SkipDefaultTransaction: false,
+		NamingStrategy:         &schema.NamingStrategy{TablePrefix: "", SingularTable: true, NameReplacer: nil, NoLowerCase: false},
 	})
+
+	if err != nil {
+		t.Fatalf("error creating GORM database object: %v", err)
+	}
+
+	// Create test repository
+	newRepo := repository.NewUserProfileRepository(gormDB)
+	// repo := &userProfileRepository{DB: gorm.OpenDB(db)}
+
+	// Create test context and user profile
+	ctx := context.Background()
+	userProfile := &model.UserProfile{
+		DisplayName: "Big John Doe",
+		FirstName:   "John",
+		LastName:    "Doe",
+		Email:       "john.doe@gmail.com",
+		Phone:       "8148675309",
+		Gender:      "Male",
+		Birthdate:   time.Date(2000, 3, 13, 10, 23, 0, 0, time.UTC),
+		Password:    "taco",
+	}
+
+	expectedID := uuid.New()
+
+	mock.ExpectBegin()
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO user_profile ("id","display_name","first_name", "last_name", "email", "phone", "gender", "birthdate", "password") VALUES`)).
+		WithArgs(expectedID, userProfile.DisplayName, userProfile.FirstName, userProfile.LastName, userProfile.Email, userProfile.Phone, userProfile.Gender, userProfile.Birthdate, userProfile.Password).
+		WillReturnResult(sqlmock.NewResult(1, 1))
+	mock.ExpectCommit()
+
+	// Call Create method
+	id, err := newRepo.Create(ctx, userProfile)
+
+	// Check that the result is as expected
+	if err != nil {
+		t.Errorf("unexpected error from Create method: %v", err)
+	}
+	if id != expectedID {
+		t.Errorf("unexpected ID returned from Create method: got %v, want %v", id, expectedID)
+	}
+
+	// Check that all expectations were met
+	if err := mock.ExpectationsWereMet(); err != nil {
+		t.Errorf("unfulfilled expectations: %v", err)
+	}
 }

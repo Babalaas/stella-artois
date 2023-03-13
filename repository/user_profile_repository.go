@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"babalaas/stella-artois/db"
 	"babalaas/stella-artois/model"
 	"context"
 	"log"
@@ -27,15 +26,7 @@ func (repo *userProfileRepository) Create(ctx context.Context, userProfile *mode
 }
 
 // NewUserProfileRepository creates a new PostRepository with the server's database instance
-func NewUserProfileRepository() model.UserProfileRepository {
-	return &userProfileRepository{
-		DB: db.GetInstance(),
-	}
-}
-
-// NewTestUserProfileRepository creates a new gorm.DB
-// which is used with a sqlmock
-func NewTestUserProfileRepository(db *gorm.DB) model.UserProfileRepository {
+func NewUserProfileRepository(db *gorm.DB) model.UserProfileRepository {
 	return &userProfileRepository{
 		DB: db,
 	}

@@ -22,8 +22,8 @@ func (service *postService) AddToCollection(ctx context.Context, post *model.Pos
 }
 
 // NewPostService creates a Post Service with a PostRepository attribute
-func NewPostService(postRepo *model.PostRepository) model.PostService {
+func NewPostService(postRepo model.PostRepository) model.PostService {
 	return &postService{
-		PostRepository: *postRepo,
+		PostRepository: postRepo,
 	}
 }

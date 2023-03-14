@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"babalaas/stella-artois/db"
 	"babalaas/stella-artois/model"
 	"context"
 	"log"
@@ -40,8 +39,8 @@ func (repo *postRepository) Update(ctx context.Context, post *model.Post) (err e
 }
 
 // NewPostRepository creates a new PostRepository with the server's database instance
-func NewPostRepository() model.PostRepository {
+func NewPostRepository(db *gorm.DB) model.PostRepository {
 	return &postRepository{
-		DB: db.GetInstance(),
+		DB: db,
 	}
 }

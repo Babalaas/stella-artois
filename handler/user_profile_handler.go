@@ -10,10 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// JSONBirthdate is the type alias for recieving date data from HTTP requests as JSON
-// Allows for custom Marshalling and Unmarshalling
-type JSONBirthdate time.Time
-
 type registerRequest struct {
 	DisplayName string    `json:"display_name" binding:"required"`
 	FirstName   string    `json:"first_name" binding:"required"`

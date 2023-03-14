@@ -16,9 +16,9 @@ type UserProfile struct {
 	LastName    string    `gorm:"type:varchar(30);not null"`
 	Email       string    `gorm:"type:varchar(255);not null"`
 	Phone       string    `gorm:"type:varchar(15);not null"`
-	Gender      string    `gorm:"type:varchar(25);not null"`
 	Birthdate   time.Time `gorm:"type:date;not null"`
 	Password    string    `gorm:"type:text"`
+	ProfilePic  string    `gorm:"type:text;not null"`
 }
 
 // UserProfileService definition

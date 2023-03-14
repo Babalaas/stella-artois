@@ -10,16 +10,15 @@ import (
 
 // Post entity
 type Post struct {
-	ID           uuid.UUID `gorm:"type:uuid;primaryKey"`
-	ProfileID    uuid.UUID `gorm:"type:uuid;not null"`
-	CollectionID uuid.UUID `gorm:"type:uuid"`
-	Caption      string    `gorm:"type:varchar(255);not null"`
-	Location     string    `gorm:"type:varchar(255);not null"`
-	Created      time.Time `gorm:"type:timestamp without time zone;not null"`
-	Image        string    `gorm:"type:varchar(255);not null"`
-	Image2       string    `gorm:"type:varchar(255)"`
-	DrinkNumber  int       `gorm:"type:int2"`
-	LikeCount    int       `gorm:"type:int4;not null"`
+	ID            uuid.UUID `gorm:"type:uuid;primaryKey"`
+	UserProfileID uuid.UUID `gorm:"type:uuid;not null"`
+	CollectionID  uuid.UUID `gorm:"type:uuid"`
+	Caption       string    `gorm:"type:varchar(255);not null"`
+	DateCreated   time.Time `gorm:"type:timestamp without time zone;not null"`
+	Image         string    `gorm:"type:varchar(255);not null"`
+	Image2        string    `gorm:"type:varchar(255)"`
+	ReactionCount int       `gorm:"type:int4;not null"`
+	InCollection  bool      `gorm:"type:boolean; not null"`
 }
 
 // PostService interface definition
@@ -41,8 +40,9 @@ type PostRepository interface {
 func (post *Post) BeforeCreate(db *gorm.DB) error {
 	post.ID = uuid.New()
 	post.CollectionID = uuid.Nil
-	post.Created = time.Now().Local()
-	post.Created.Format(time.RFC3339)
-	post.LikeCount = 0
+	post.DateCreated = time.Now().Local()
+	post.DateCreated.Format(time.RFC3339)
+	post.ReactionCount = 0
+	post.InCollection = false
 	return nil
 }

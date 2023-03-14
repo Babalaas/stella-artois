@@ -50,16 +50,16 @@ func Test_Create(t *testing.T) {
 		LastName:    "Doe",
 		Email:       "john.doe@gmail.com",
 		Phone:       "8148675309",
-		Gender:      "Male",
 		Birthdate:   time.Date(2000, 3, 13, 10, 23, 0, 0, time.UTC),
 		Password:    "taco",
+		ProfilePic:  "google.com",
 	}
 
 	expectedID := uuid.New()
 
 	mock.ExpectBegin()
-	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO user_profile ("id","display_name","first_name", "last_name", "email", "phone", "gender", "birthdate", "password") VALUES`)).
-		WithArgs(expectedID, userProfile.DisplayName, userProfile.FirstName, userProfile.LastName, userProfile.Email, userProfile.Phone, userProfile.Gender, userProfile.Birthdate, userProfile.Password).
+	mock.ExpectExec(regexp.QuoteMeta(`INSERT INTO user_profile ("id","display_name","first_name", "last_name", "email", "phone", "birthdate", "password", "profile_pic") VALUES`)).
+		WithArgs(expectedID, userProfile.DisplayName, userProfile.FirstName, userProfile.LastName, userProfile.Email, userProfile.Phone, userProfile.Birthdate, userProfile.Password, userProfile.ProfilePic).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectCommit()
 

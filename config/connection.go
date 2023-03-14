@@ -31,6 +31,7 @@ func Connect(connectionString string) {
 // Migrate keeps model up to date with database instance
 func Migrate() {
 	instance.AutoMigrate(&model.Post{})
+	instance.AutoMigrate(&model.UserProfile{})
 	log.Println("Database Migration Completed...")
 }
 

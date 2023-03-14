@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"babalaas/stella-artois/db"
+	"babalaas/stella-artois/config"
 	"babalaas/stella-artois/handler"
 	"babalaas/stella-artois/repository"
 	"babalaas/stella-artois/service"
@@ -22,8 +22,8 @@ type envConfig struct {
 
 func main() {
 	myEnv := initEnvConfig()
-	db.Connect(myEnv.ConnectionString)
-	db.Migrate()
+	config.Connect(myEnv.ConnectionString)
+	config.Migrate()
 
 	gin.SetMode(myEnv.GinMode)
 
@@ -40,8 +40,8 @@ func main() {
 func inject() (*gin.Engine, error) {
 
 	// repositories
-	postRepo := repository.NewPostRepository()
-	userProfileRepo := repository.NewUserProfileRepository(db.GetInstance())
+	postRepo := repository.NewPostRepository(config.GetInstance())
+	userProfileRepo := repository.NewUserProfileRepository(config.GetInstance())
 
 	// service configs
 	userProfileConfig := &service.UPSConfig{

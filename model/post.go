@@ -41,7 +41,6 @@ func (post *Post) BeforeCreate(db *gorm.DB) error {
 	post.ID = uuid.New()
 	post.CollectionID = uuid.Nil
 	post.DateCreated = time.Now().Local()
-	post.DateCreated.Format(time.RFC3339)
 	post.ReactionCount = 0
 	post.InCollection = false
 	return nil

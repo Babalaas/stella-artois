@@ -49,7 +49,7 @@ func inject() (*gin.Engine, error) {
 	}
 
 	// services
-	postService := service.NewPostService(&postRepo)
+	postService := service.NewPostService(postRepo)
 	userProfileService := service.NewUserProfileService(userProfileConfig)
 
 	// handler layer

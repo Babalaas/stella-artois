@@ -43,3 +43,27 @@ func TestRegister(t *testing.T) {
 		mockUserProfileRepo.AssertExpectations(t)
 	})
 }
+
+
+func TestLogIn(t *testing.T) {
+	mockUserProfileRepo := new(mocks.UserProfileRepository)
+
+	serviceConfig := service.UPSConfig{
+		UserProfileRepository: mockUserProfileRepo,
+	}
+	t.Run("success", func(t *testing.T) {
+		mockLogInRequest := model.UserProfile{
+			DisplayName: "Dr. Brain May",
+			Password:    "queen",
+		}
+
+		mockUserProfileRepo.On("FindByDisplayName", mock.Anything, mockLogInRequest.DisplayName).Return(mockLogInRequest, nil).Once()
+
+		service := service.NewUserProfileService(&serviceConfig)
+
+		err := service.LogIn(context.Background(), &mockLogInRequest)
+
+		assert.NoError(t, err)
+		mockUserProfileRepo.AssertExpectations(t)
+	})
+}

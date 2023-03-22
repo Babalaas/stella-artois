@@ -1,7 +1,8 @@
 # Babalaas Application Server
-The server for the Babalaas mobile application.  
+The server for the Babalaas social media mobile application.
 - Written in Go using modules
 - Connects to PostgreSQL container with test data
+- Designed using principles from the Go Clean Architecture
 
 ## Running Locally
 1. Be sure to have Go 1.19, Docker, and Docker Compose installed 

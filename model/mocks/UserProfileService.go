@@ -16,6 +16,7 @@ type UserProfileService struct {
 	mock.Mock
 }
 
+
 // LogIn provides a mock function with given fields: ctx, userProfile
 func (_m *UserProfileService) LogIn(ctx context.Context, userProfile *model.UserProfile) error {
 	ret := _m.Called(ctx, userProfile)

@@ -44,6 +44,7 @@ func TestRegister(t *testing.T) {
 	})
 }
 
+
 func TestLogIn(t *testing.T) {
 	mockUserProfileRepo := new(mocks.UserProfileRepository)
 

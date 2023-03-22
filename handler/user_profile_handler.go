@@ -21,6 +21,7 @@ type registerRequest struct {
 	ProfilePic  string    `json:"profile_pic" binding:"required"`
 }
 
+
 type logInRequest struct {
 	DisplayName string `json:"display_name" binding:"required"`
 	Password    string `json:"password" binding:"required"`
@@ -62,6 +63,7 @@ func (handler *Handler) Register(c *gin.Context) {
 		"id": resID,
 	})
 }
+
 
 // LogIn authenticates one user_profile
 func (handler *Handler) LogIn(c *gin.Context) {

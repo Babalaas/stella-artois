@@ -63,6 +63,7 @@ func (handler *Handler) Register(c *gin.Context) {
 	})
 }
 
+// LogIn authenticates one user_profile
 func (handler *Handler) LogIn(c *gin.Context) {
 	var req logInRequest
 

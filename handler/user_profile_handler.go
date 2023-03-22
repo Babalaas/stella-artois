@@ -21,6 +21,11 @@ type registerRequest struct {
 	ProfilePic  string    `json:"profile_pic" binding:"required"`
 }
 
+type logInRequest struct {
+	DisplayName string `json:"display_name" binding:"required"`
+	Password    string `json:"password" binding:"required"`
+}
+
 // Register handles the HTTP request to create one new user_profile entity
 // and store it in the database.
 func (handler *Handler) Register(c *gin.Context) {
@@ -55,5 +60,35 @@ func (handler *Handler) Register(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{
 		"id": resID,
+	})
+}
+
+func (handler *Handler) LogIn(c *gin.Context) {
+	var req logInRequest
+
+	if bindErr := c.ShouldBind(&req); bindErr != nil {
+		log.Panicf("Failed to bind login JSON input: %v\n", bindErr)
+		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
+		return
+	}
+
+	u := &model.UserProfile{
+		DisplayName: req.DisplayName,
+		Password:    req.Password,
+	}
+
+	ctx := c.Request.Context()
+	err := handler.UserProfileService.LogIn(ctx, u)
+
+	if err != nil {
+		log.Printf("Failed to sign in user: %v\n", err.Error())
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "login successful",
 	})
 }

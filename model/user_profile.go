@@ -24,11 +24,13 @@ type UserProfile struct {
 // UserProfileService definition
 type UserProfileService interface {
 	Register(ctx context.Context, userProfile *UserProfile) (id uuid.UUID, err error)
+	LogIn(ctx context.Context, userProfile *UserProfile) error
 }
 
 // UserProfileRepository definition
 type UserProfileRepository interface {
 	Create(ctx context.Context, userProfile *UserProfile) (id uuid.UUID, err error)
+	FindByDisplayName(ctx context.Context, displayName string) (UserProfile, error)
 }
 
 // BeforeCreate is a hook called to initialize user_profile fields to default values

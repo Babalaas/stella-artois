@@ -46,7 +46,7 @@ func (service *UserProfileService) LogIn(ctx context.Context, userProfile *model
 		log.Panic("UserProfileService: error processing password.")
 	}
 
-	if doesMatch == false {
+	if !doesMatch {
 		log.Panic("UserProfileService: passwords do not match.")
 	}
 

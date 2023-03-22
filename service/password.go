@@ -9,5 +9,5 @@ func comparePasswords(storedPassword string, suppliedPassword string) (bool, err
 		return true, nil
 	}
 
-	return false, errors.New("Password Service: Passwords do not match")
+	return false, errors.New("password service: passwords do not match")
 }

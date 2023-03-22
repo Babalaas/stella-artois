@@ -30,6 +30,29 @@ func (service *UserProfileService) Register(ctx context.Context, userProfile *mo
 	return newID, nil
 }
 
+// LogIn implements model.UserProfileService
+func (service *UserProfileService) LogIn(ctx context.Context, userProfile *model.UserProfile) error {
+	fetchedUserProfile, err := service.UserProfileRepository.FindByDisplayName(ctx, userProfile.DisplayName)
+
+	if err != nil {
+		log.Panic("UserProfileService could not fetch User Profile.")
+		return err
+	}
+
+	// compare passwords
+	doesMatch, err := comparePasswords(fetchedUserProfile.Password, userProfile.Password)
+
+	if err != nil {
+		log.Panic("UserProfileService: error processing password.")
+	}
+
+	if doesMatch == false {
+		log.Panic("UserProfileService: passwords do not match.")
+	}
+
+	return nil
+}
+
 // NewUserProfileService is a factory function for initialization a UserProfileService with its repository layer dependencies
 func NewUserProfileService(config *UPSConfig) model.UserProfileService {
 	return &UserProfileService{

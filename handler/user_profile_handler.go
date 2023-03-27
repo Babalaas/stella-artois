@@ -90,7 +90,6 @@ func (handler *Handler) LogIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message":      "login successful",
 		"user_profile": userProfile,
 	})
 }

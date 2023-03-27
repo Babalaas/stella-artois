@@ -1,6 +1,7 @@
 package model
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,6 +15,16 @@ type PostComment struct {
 	PostID        uuid.UUID `json:"post_id" gorm:"type:uuid;not null"`
 	DateCreated   time.Time `json:"date_created" gorm:"type:timestamp with time zone;not null"`
 	Content       string    `json:"content" gorm:"type:timestamp with time zone;not null"`
+}
+
+type PostCommentRepository interface {
+	Create(ctx context.Context, comment PostComment) error
+	Delete(ctx context.Context, comment PostComment) error
+}
+
+type PostCommentService interface {
+	Create(ctx context.Context, comment PostComment) error
+	Delete(ctx context.Context, comment PostComment) error
 }
 
 // BeforeCreate is the hook called before a PostComment is inserted into the database

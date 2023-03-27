@@ -21,7 +21,6 @@ type registerRequest struct {
 	ProfilePic  string    `json:"profile_pic" binding:"required"`
 }
 
-
 type logInRequest struct {
 	DisplayName string `json:"display_name" binding:"required"`
 	Password    string `json:"password" binding:"required"`
@@ -64,7 +63,6 @@ func (handler *Handler) Register(c *gin.Context) {
 	})
 }
 
-
 // LogIn authenticates one user_profile
 func (handler *Handler) LogIn(c *gin.Context) {
 	var req logInRequest
@@ -81,7 +79,7 @@ func (handler *Handler) LogIn(c *gin.Context) {
 	}
 
 	ctx := c.Request.Context()
-	err := handler.UserProfileService.LogIn(ctx, u)
+	userProfile, err := handler.UserProfileService.LogIn(ctx, u)
 
 	if err != nil {
 		log.Printf("Failed to sign in user: %v\n", err.Error())
@@ -92,6 +90,7 @@ func (handler *Handler) LogIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "login successful",
+		"message":      "login successful",
+		"user_profile": userProfile,
 	})
 }

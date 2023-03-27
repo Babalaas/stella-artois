@@ -23,14 +23,13 @@ type UserProfile struct {
 
 // UserProfileService definition
 type UserProfileService interface {
-	Register(ctx context.Context, userProfile *UserProfile) (id uuid.UUID, err error)
-	LogIn(ctx context.Context, userProfile *UserProfile) error
+	Register(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
+	LogIn(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
 }
 
 // UserProfileRepository definition
 type UserProfileRepository interface {
-	Create(ctx context.Context, userProfile *UserProfile) (id uuid.UUID, err error)
-
+	Create(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
 	FindByDisplayName(ctx context.Context, displayName string) (UserProfile, error)
 }
 

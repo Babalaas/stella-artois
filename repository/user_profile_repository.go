@@ -5,7 +5,6 @@ import (
 	"context"
 	"log"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -14,15 +13,15 @@ type userProfileRepository struct {
 }
 
 // Create implements model.UserProfileRepository
-func (repo *userProfileRepository) Create(ctx context.Context, userProfile *model.UserProfile) (uuid.UUID, error) {
+func (repo *userProfileRepository) Create(ctx context.Context, userProfile *model.UserProfile) (model.UserProfile, error) {
 	result := repo.DB.Create(&userProfile)
 
 	if result.Error != nil {
 		log.Panic("Could not create new User Profile.")
-		return uuid.Nil, result.Error
+		return *userProfile, result.Error
 	}
 
-	return userProfile.ID, nil
+	return *userProfile, nil
 }
 
 // FindByDisplay name finds the first user_profile based on the passed display name

@@ -138,10 +138,21 @@ VALUES
     'TheAlbinoGiannis',
     'Jared',
     'Heidt',
-    'jared@gmail.com',
+    'jared@babalaas.com',
     '8148675309',
     '2001-02-01',
     'taco',
+    'https://library.sportingnews.com/styles/crop_style_16_9_mobile_2x/s3/2023-03/GettyImages-1471642056.jpg?itok=Mcrb_5re'
+  ),
+  (
+    '4f9da08c-62eb-4dc0-9ab5-0d7183437695',
+    'HartAttack0328',
+    'Sean',
+    'Hart',
+    'sean@babalaas.com',
+    '8148675309',
+    '2001-03-28',
+    'password',
     'https://library.sportingnews.com/styles/crop_style_16_9_mobile_2x/s3/2023-03/GettyImages-1471642056.jpg?itok=Mcrb_5re'
   );
 
@@ -214,4 +225,14 @@ VALUES
     '1823ea5c-7cad-11ed-a1eb-0242ac120002',
     '93b4adb8-2b31-47cd-ae92-fd674eadf3b3',
     '2023-01-22 23:47:00-5'
+  );
+
+INSERT INTO
+  friendship (request_user_profile_id, response_user_profile_id, status, date_updated)
+VALUES
+  (
+    '12b02b58-7cad-11ed-a1eb-0242ac120002',
+    '4f9da08c-62eb-4dc0-9ab5-0d7183437695',
+    'accepted',
+    '2023-03-26 23:47:00-5'
   );

@@ -23,5 +23,9 @@ func (friendship *Friendship) BeforeCreate(db *gorm.DB) error {
 }
 
 type FriendshipRepository interface {
-	GetAllFriends(ctx context.Context, userProfile *UserProfile) ([]UserProfile, error)
+	GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]UserProfile, error)
+}
+
+type FriendshipService interface {
+	GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]UserProfile, error)
 }

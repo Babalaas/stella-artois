@@ -18,13 +18,13 @@ type PostComment struct {
 }
 
 type PostCommentRepository interface {
-	Create(ctx context.Context, comment PostComment) error
-	Delete(ctx context.Context, comment PostComment) error
+	Create(ctx context.Context, comment *PostComment) (PostComment, error)
+	Delete(ctx context.Context, comment *PostComment) error
 }
 
 type PostCommentService interface {
-	Create(ctx context.Context, comment PostComment) error
-	Delete(ctx context.Context, comment PostComment) error
+	Create(ctx context.Context, comment *PostComment) (PostComment, error)
+	Delete(ctx context.Context, comment *PostComment) error
 }
 
 // BeforeCreate is the hook called before a PostComment is inserted into the database

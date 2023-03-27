@@ -22,7 +22,7 @@ func (service *UserProfileService) Register(ctx context.Context, userProfile *mo
 
 	if resErr != nil {
 		log.Panic("UserProfileService could not create new User Profile.")
-		return *&model.UserProfile{}, resErr
+		return *userProfile, resErr
 	}
 
 	return *userProfile, nil

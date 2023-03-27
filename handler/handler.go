@@ -24,7 +24,6 @@ type Config struct {
 }
 
 // NewHandler is a factory function which a new Handler struct
-// with the required services and creates necessary route groups
 func NewHandler(config *Config) {
 	handler := &Handler{
 		PostService:        config.PostService,

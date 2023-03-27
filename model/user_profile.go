@@ -10,15 +10,15 @@ import (
 
 // UserProfile entity
 type UserProfile struct {
-	ID          uuid.UUID `gorm:"type:uuid;primaryKey"`
-	DisplayName string    `gorm:"type:varchar(30);not null"`
-	FirstName   string    `gorm:"type:varchar(15);not null"`
-	LastName    string    `gorm:"type:varchar(30);not null"`
-	Email       string    `gorm:"type:varchar(255);not null"`
-	Phone       string    `gorm:"type:varchar(15);not null"`
-	Birthdate   time.Time `gorm:"type:date;not null"`
-	Password    string    `gorm:"type:text"`
-	ProfilePic  string    `gorm:"type:text;not null"`
+	ID          uuid.UUID `json:"id" gorm:"type:uuid;primaryKey"`
+	DisplayName string    `json:"display_name" gorm:"type:varchar(30);not null"`
+	FirstName   string    `json:"first_name" gorm:"type:varchar(15);not null"`
+	LastName    string    `json:"last_name" gorm:"type:varchar(30);not null"`
+	Email       string    `json:"email" gorm:"type:varchar(255);not null"`
+	Phone       string    `json:"phone" gorm:"type:varchar(15);not null"`
+	Birthdate   time.Time `json:"birthdate" gorm:"type:date;not null"`
+	Password    string    `json:"password" gorm:"type:text"`
+	ProfilePic  string    `json:"profile_pic" gorm:"type:text;not null"`
 }
 
 // UserProfileService definition

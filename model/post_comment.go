@@ -29,7 +29,8 @@ type PostCommentService interface {
 
 // BeforeCreate is the hook called before a PostComment is inserted into the database
 // Used to initialize default values
-func (comment *PostComment) BeforeCreate(db *gorm.DB) {
+func (comment *PostComment) BeforeCreate(db *gorm.DB) error {
 	comment.ID = uuid.New()
 	comment.DateCreated = time.Now().Local()
+	return nil
 }

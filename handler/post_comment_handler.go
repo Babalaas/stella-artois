@@ -12,17 +12,17 @@ import (
 )
 
 type createPostCommentRequest struct {
-	UserProfileID uuid.UUID
-	PostID        uuid.UUID
-	Content       string
+	UserProfileID uuid.UUID `json:"user_profile_id" binding:"required"`
+	PostID        uuid.UUID `json:"post_id" binding:"required"`
+	Content       string    `json:"content" binding:"required"`
 }
 
 type deletePostCommentRequest struct {
-	ID            uuid.UUID
-	UserProfileID uuid.UUID
-	PostID        uuid.UUID
-	DateCreated   time.Time
-	Content       string
+	ID            uuid.UUID `json:"id" binding:"required"`
+	UserProfileID uuid.UUID `json:"user_profile_id" binding:"required"`
+	PostID        uuid.UUID `json:"post_id" binding:"required"`
+	DateCreated   time.Time `json:"date_created" binding:"required"`
+	Content       string    `json:"content" binding:"required"`
 }
 
 func (handler *Handler) CreatePostComment(c *gin.Context) {
@@ -43,7 +43,7 @@ func (handler *Handler) CreatePostComment(c *gin.Context) {
 	resComment, createErr := handler.PostCommentService.Create(c.Request.Context(), reqComment)
 
 	if createErr != nil {
-		log.Panicf("Failed to register user profile: %v\n", createErr)
+		log.Panicf("Failed to create post comment: %v\n", createErr)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": createErr,
 		})

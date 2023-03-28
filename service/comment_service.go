@@ -9,6 +9,7 @@ type postCommentService struct {
 	postCommentRepo model.CommentRepository
 }
 
+// CSConfig is the parameter object for creating new CommentServices
 type CSConfig struct {
 	CommentRepo model.CommentRepository
 }
@@ -25,6 +26,7 @@ func (service *postCommentService) Delete(ctx context.Context, comment *model.Po
 	return err
 }
 
+// NewCommentService is the factory function for the CommentService struct
 func NewCommentService(config *CSConfig) model.CommentService {
 	return &postCommentService{
 		postCommentRepo: config.CommentRepo,

@@ -25,6 +25,7 @@ type deletePostCommentRequest struct {
 	Content       string    `json:"content" binding:"required"`
 }
 
+// CreatePostComment is the HTTP handler to create one new PostComment
 func (handler *Handler) CreatePostComment(c *gin.Context) {
 	var req createPostCommentRequest
 
@@ -55,6 +56,7 @@ func (handler *Handler) CreatePostComment(c *gin.Context) {
 	})
 }
 
+// DeletePostComment is HTTP handler to delete one post comment by id
 func (handler *Handler) DeletePostComment(c *gin.Context) {
 	var req deletePostCommentRequest
 

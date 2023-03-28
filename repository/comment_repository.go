@@ -36,6 +36,7 @@ func (repo *commentRepository) Delete(ctx context.Context, comment *model.PostCo
 	return nil
 }
 
+// NewCommentRepository is the factory function for creating CommentRepositories
 func NewCommentRepository(db *gorm.DB) model.CommentRepository {
 	return &commentRepository{
 		DB: db,

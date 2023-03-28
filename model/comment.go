@@ -17,11 +17,13 @@ type PostComment struct {
 	Content       string    `json:"content" gorm:"type:timestamp with time zone;not null"`
 }
 
+// CommentRepository defines how the server interacts with post comments in the db
 type CommentRepository interface {
 	Create(ctx context.Context, comment *PostComment) (PostComment, error)
 	Delete(ctx context.Context, comment *PostComment) error
 }
 
+// CommentService defines the use cases interacting with post comments
 type CommentService interface {
 	Create(ctx context.Context, comment *PostComment) (PostComment, error)
 	Delete(ctx context.Context, comment *PostComment) error

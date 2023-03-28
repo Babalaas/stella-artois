@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// GetAllFriends is the HTTP handler to return the passed userProfileID's friends in a list
 func (handler *Handler) GetAllFriends(c *gin.Context) {
 	reqID := c.Param("id")
 

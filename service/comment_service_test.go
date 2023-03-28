@@ -51,3 +51,35 @@ func TestCreatePostComment(t *testing.T) {
 		mockCommentRepo.AssertExpectations(t)
 	})
 }
+
+func TestDeletePostComment(t *testing.T) {
+	mockCommentRepo := new(mocks.CommentRepository)
+
+	serviceConfig := service.CSConfig{
+		CommentRepo: mockCommentRepo,
+	}
+
+	mockID := uuid.New()
+	mockUserProfileID := uuid.New()
+	mockPostID := uuid.New()
+
+	service := service.NewCommentService(&serviceConfig)
+
+	t.Run("success", func(t *testing.T) {
+		mockPostComment := model.PostComment{
+			ID:            mockID,
+			UserProfileID: mockUserProfileID,
+			PostID:        mockPostID,
+			DateCreated:   time.Date(2023, time.March, 28, 14, 24, 50, 0, time.Local),
+			Content:       "This is a test post comment!",
+		}
+
+		mockCommentRepo.On("Delete", mock.Anything, &mockPostComment).Return(nil).Once()
+		err := service.Delete(context.Background(), &mockPostComment)
+
+		assert.NoError(t, err)
+		assert.Nil(t, err)
+		mockCommentRepo.AssertExpectations(t)
+	})
+
+}

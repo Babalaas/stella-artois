@@ -11,6 +11,7 @@ type Handler struct {
 	PostService        model.PostService
 	UserProfileService model.UserProfileService
 	FriendshipService  model.FriendshipService
+	PostCommentService model.PostCommentService
 }
 
 // Config holds services injected on handler initilization
@@ -21,6 +22,7 @@ type Config struct {
 	PostService        model.PostService
 	UserProfileService model.UserProfileService
 	FriendshipService  model.FriendshipService
+	PostCommentService model.PostCommentService
 }
 
 // NewHandler is a factory function which a new Handler struct
@@ -29,6 +31,7 @@ func NewHandler(config *Config) {
 		PostService:        config.PostService,
 		UserProfileService: config.UserProfileService,
 		FriendshipService:  config.FriendshipService,
+		PostCommentService: config.PostCommentService,
 	}
 
 	postRouteGroup := config.Router.Group("/posts")
@@ -40,4 +43,8 @@ func NewHandler(config *Config) {
 
 	friendshipRouteGroup := config.Router.Group("/friends")
 	friendshipRouteGroup.GET("/:id", handler.GetAllFriends)
+
+	commentRouteGroup := config.Router.Group("/post-comments")
+	commentRouteGroup.POST("", handler.CreatePostComment)
+	commentRouteGroup.DELETE("", handler.DeletePostComment)
 }

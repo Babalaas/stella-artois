@@ -40,7 +40,7 @@ func (handler *Handler) CreatePostComment(c *gin.Context) {
 		Content:       req.Content,
 	}
 
-	resComment, createErr := handler.PostCommentService.Create(c.Request.Context(), reqComment)
+	resComment, createErr := handler.CommentService.Create(c.Request.Context(), reqComment)
 
 	if createErr != nil {
 		log.Panicf("Failed to create post comment: %v\n", createErr)
@@ -72,7 +72,7 @@ func (handler *Handler) DeletePostComment(c *gin.Context) {
 		Content:       req.Content,
 	}
 
-	err := handler.PostCommentService.Delete(c.Request.Context(), reqComment)
+	err := handler.CommentService.Delete(c.Request.Context(), reqComment)
 
 	if err != nil {
 		log.Panicf("Unable to delete post")

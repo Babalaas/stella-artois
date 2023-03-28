@@ -8,12 +8,12 @@ import (
 	"gorm.io/gorm"
 )
 
-type postCommentRepository struct {
+type commentRepository struct {
 	DB *gorm.DB
 }
 
 // Create implements model.PostCommentRepository
-func (repo *postCommentRepository) Create(ctx context.Context, comment *model.PostComment) (model.PostComment, error) {
+func (repo *commentRepository) Create(ctx context.Context, comment *model.PostComment) (model.PostComment, error) {
 	result := repo.DB.Create(&comment)
 
 	if result.Error != nil {
@@ -25,7 +25,7 @@ func (repo *postCommentRepository) Create(ctx context.Context, comment *model.Po
 }
 
 // Delete implements model.PostCommentRepository
-func (repo *postCommentRepository) Delete(ctx context.Context, comment *model.PostComment) error {
+func (repo *commentRepository) Delete(ctx context.Context, comment *model.PostComment) error {
 	result := repo.DB.Delete(&comment)
 
 	if result.Error != nil {
@@ -36,8 +36,8 @@ func (repo *postCommentRepository) Delete(ctx context.Context, comment *model.Po
 	return nil
 }
 
-func NewPostCommentRepository(db *gorm.DB) model.PostCommentRepository {
-	return &postCommentRepository{
+func NewCommentRepository(db *gorm.DB) model.CommentRepository {
+	return &commentRepository{
 		DB: db,
 	}
 }

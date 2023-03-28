@@ -17,12 +17,12 @@ type PostComment struct {
 	Content       string    `json:"content" gorm:"type:timestamp with time zone;not null"`
 }
 
-type PostCommentRepository interface {
+type CommentRepository interface {
 	Create(ctx context.Context, comment *PostComment) (PostComment, error)
 	Delete(ctx context.Context, comment *PostComment) error
 }
 
-type PostCommentService interface {
+type CommentService interface {
 	Create(ctx context.Context, comment *PostComment) (PostComment, error)
 	Delete(ctx context.Context, comment *PostComment) error
 }

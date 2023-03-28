@@ -6,11 +6,11 @@ import (
 )
 
 type postCommentService struct {
-	postCommentRepo model.PostCommentRepository
+	postCommentRepo model.CommentRepository
 }
 
-type PCSConfig struct {
-	PostCommentRepo model.PostCommentRepository
+type CSConfig struct {
+	PostCommentRepo model.CommentRepository
 }
 
 // Create implements model.PostCommentService
@@ -25,7 +25,7 @@ func (service *postCommentService) Delete(ctx context.Context, comment *model.Po
 	return err
 }
 
-func NewPostCommentService(config *PCSConfig) model.PostCommentService {
+func NewCommentService(config *CSConfig) model.CommentService {
 	return &postCommentService{
 		postCommentRepo: config.PostCommentRepo,
 	}

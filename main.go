@@ -55,7 +55,7 @@ func inject() (*gin.Engine, error) {
 	}
 
 	postCommentConfig := &service.CSConfig{
-		PostCommentRepo: postCommentRepo,
+		CommentRepo: postCommentRepo,
 	}
 
 	// services

@@ -10,7 +10,7 @@ type postCommentService struct {
 }
 
 type CSConfig struct {
-	PostCommentRepo model.CommentRepository
+	CommentRepo model.CommentRepository
 }
 
 // Create implements model.PostCommentService
@@ -27,6 +27,6 @@ func (service *postCommentService) Delete(ctx context.Context, comment *model.Po
 
 func NewCommentService(config *CSConfig) model.CommentService {
 	return &postCommentService{
-		postCommentRepo: config.PostCommentRepo,
+		postCommentRepo: config.CommentRepo,
 	}
 }

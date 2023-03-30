@@ -3,6 +3,7 @@ package service
 import (
 	"babalaas/stella-artois/model"
 	"context"
+	"log"
 )
 
 type reactionService struct {
@@ -11,8 +12,12 @@ type reactionService struct {
 
 // ReactToPost implements model.ReactionService
 func (service *reactionService) ReactToPost(ctx context.Context, reaction *model.PostReaction) (model.PostReaction, error) {
-	newReaction, err := service.ReactionRepo.Create(ctx, reaction)
-	return newReaction, err
+	_, err := service.ReactionRepo.Create(ctx, reaction)
+
+	if err != nil {
+		log.Panic("BAD")
+	}
+	return *reaction, err
 }
 
 // RSConfig is the parameter object for creating new ReactionService structs

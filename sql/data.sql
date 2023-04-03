@@ -236,3 +236,11 @@ VALUES
     'accepted',
     '2023-03-26 23:47:00-5'
   );
+INSERT INTO "public".reaction
+  (id, 
+  name, 
+  icon) 
+VALUES 
+  (1, 
+  'Like', 
+  'https://png.pngtree.com/png-vector/20190224/ourmid/pngtree-vector-like-icon-png-image_699751.jpg');

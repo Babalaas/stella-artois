@@ -16,6 +16,7 @@ type postReactionRequest struct {
 	ReactionID    int       `json:"reaction_id" binding:"required"`
 }
 
+// ReactToPost creates a new post reaction
 func (handler *Handler) ReactToPost(c *gin.Context) {
 	var req postReactionRequest
 

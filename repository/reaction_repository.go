@@ -24,6 +24,7 @@ func (repo *reactionRepository) Create(ctx context.Context, reaction *model.Post
 	return *reaction, nil
 }
 
+// NewReactionRepository is the factory function for creating reaction repositories
 func NewReactionRepository(db *gorm.DB) model.ReactionRepository {
 	return &reactionRepository{
 		DB: db,

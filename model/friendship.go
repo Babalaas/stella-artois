@@ -26,6 +26,7 @@ func (friendship *Friendship) BeforeCreate(db *gorm.DB) error {
 // FriendshipRepository defines how the application interacts with the db
 type FriendshipRepository interface {
 	GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]UserProfile, error)
+	GetFriendsPosts(ctx context.Context, userProfileID uuid.UUID) ([]Post, error)
 }
 
 // FriendshipService defines the usecases involving friendships

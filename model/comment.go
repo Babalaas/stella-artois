@@ -21,6 +21,7 @@ type PostComment struct {
 type CommentRepository interface {
 	Create(ctx context.Context, comment *PostComment) (PostComment, error)
 	Delete(ctx context.Context, comment *PostComment) error
+	GetRecent(ctx context.Context, postID uuid.UUID, limit int) ([]PostComment, error)
 }
 
 // CommentService defines the use cases interacting with post comments

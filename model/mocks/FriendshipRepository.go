@@ -42,6 +42,32 @@ func (_m *FriendshipRepository) GetAllFriends(ctx context.Context, userProfileID
 	return r0, r1
 }
 
+// GetFriendsPosts provides a mock function with given fields: ctx, userProfileID
+func (_m *FriendshipRepository) GetFriendsPosts(ctx context.Context, userProfileID uuid.UUID) ([]model.Post, error) {
+	ret := _m.Called(ctx, userProfileID)
+
+	var r0 []model.Post
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]model.Post, error)); ok {
+		return rf(ctx, userProfileID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []model.Post); ok {
+		r0 = rf(ctx, userProfileID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.Post)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, userProfileID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewFriendshipRepository interface {
 	mock.TestingT
 	Cleanup(func())

@@ -63,12 +63,21 @@ func inject() (*gin.Engine, error) {
 		ReactionRepo: reactionRepo,
 	}
 
+	feedServiceConfig := service.FeedServiceConfig{
+		UserProfileRepository: userProfileRepo,
+		PostRepository:        postRepo,
+		CommentRepository:     commentRepo,
+		ReactionRepository:    reactionRepo,
+		FriendshipRepository:  friendshipRepo,
+	}
+
 	// services
 	postService := service.NewPostService(postRepo)
 	userProfileService := service.NewUserProfileService(userProfileConfig)
 	friendshipService := service.NewFriendshipService(friendshipConfig)
 	postCommentService := service.NewCommentService(commentConfig)
 	reactionService := service.NewReactionService(reactionConfig)
+	feedService := service.NewFeedService(feedServiceConfig)
 
 	// handler layer
 	router := gin.Default()
@@ -87,6 +96,7 @@ func inject() (*gin.Engine, error) {
 		FriendshipService:  friendshipService,
 		CommentService:     postCommentService,
 		ReactionService:    reactionService,
+		FeedService:        feedService,
 	}
 
 	handler.NewHandler(handlerConfig)

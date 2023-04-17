@@ -102,6 +102,7 @@ func (handler *Handler) GetAllComments(c *gin.Context) {
 	}
 
 	var trimmedComments []struct {
+		ID            string `json:"id"`
 		UserProfileID string `json:"user_profile_id"`
 		DisplayName   string `json:"display_name"`
 		Content       string `json:"content"`
@@ -113,10 +114,12 @@ func (handler *Handler) GetAllComments(c *gin.Context) {
 			log.Fatal("Could not find user profile by id")
 		}
 		trimmedComment := struct {
+			ID            string `json:"id"`
 			UserProfileID string `json:"user_profile_id"`
 			DisplayName   string `json:"display_name"`
 			Content       string `json:"content"`
 		}{
+			ID:            comment.ID.String(),
 			UserProfileID: comment.UserProfileID.String(),
 			DisplayName:   displayName,
 			Content:       comment.Content,

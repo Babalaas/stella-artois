@@ -20,13 +20,13 @@ type PostComment struct {
 // CommentRepository defines how the server interacts with post comments in the db
 type CommentRepository interface {
 	Create(ctx context.Context, comment *PostComment) (PostComment, error)
-	Delete(ctx context.Context, comment *PostComment) error
+	Delete(ctx context.Context, commentID uuid.UUID) error
 }
 
 // CommentService defines the use cases interacting with post comments
 type CommentService interface {
 	Create(ctx context.Context, comment *PostComment) (PostComment, error)
-	Delete(ctx context.Context, comment *PostComment) error
+	Delete(ctx context.Context, commentID uuid.UUID) error
 }
 
 // BeforeCreate is the hook called before a PostComment is inserted into the database

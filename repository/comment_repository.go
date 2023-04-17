@@ -5,6 +5,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -25,8 +26,8 @@ func (repo *commentRepository) Create(ctx context.Context, comment *model.PostCo
 }
 
 // Delete implements model.PostCommentRepository
-func (repo *commentRepository) Delete(ctx context.Context, comment *model.PostComment) error {
-	result := repo.DB.Delete(&comment)
+func (repo *commentRepository) Delete(ctx context.Context, commentID uuid.UUID) error {
+	result := repo.DB.Where("id = ?", commentID).Delete(&model.PostComment{})
 
 	if result.Error != nil {
 		log.Panic("Could not delete  Post Comment.")

@@ -74,8 +74,8 @@ func TestDeletePostComment(t *testing.T) {
 			Content:       "This is a test post comment!",
 		}
 
-		mockCommentRepo.On("Delete", mock.Anything, &mockPostComment).Return(nil).Once()
-		err := service.Delete(context.Background(), &mockPostComment)
+		mockCommentRepo.On("Delete", mock.Anything, mockPostComment.ID).Return(nil).Once()
+		err := service.Delete(context.Background(), mockPostComment.ID)
 
 		assert.NoError(t, err)
 		assert.Nil(t, err)

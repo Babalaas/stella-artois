@@ -28,6 +28,7 @@ type CommentRepository interface {
 type CommentService interface {
 	Create(ctx context.Context, comment *PostComment) (PostComment, error)
 	Delete(ctx context.Context, comment *PostComment) error
+	GetAll(ctx context.Context, postID uuid.UUID) ([]PostComment, error)
 }
 
 // BeforeCreate is the hook called before a PostComment is inserted into the database

@@ -3,10 +3,18 @@ package service
 import (
 	"babalaas/stella-artois/model"
 	"context"
+
+	"github.com/google/uuid"
 )
 
 type postCommentService struct {
 	postCommentRepo model.CommentRepository
+}
+
+// GetAll implements model.CommentService
+func (service *postCommentService) GetAll(ctx context.Context, postID uuid.UUID) ([]model.PostComment, error) {
+	comments, err := service.postCommentRepo.GetRecent(ctx, postID, -1)
+	return comments, err
 }
 
 // CSConfig is the parameter object for creating new CommentServices

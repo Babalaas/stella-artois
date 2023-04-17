@@ -54,6 +54,7 @@ func NewHandler(config *Config) {
 	commentRouteGroup := config.Router.Group("/post-comments")
 	commentRouteGroup.POST("", handler.CreatePostComment)
 	commentRouteGroup.DELETE("", handler.DeletePostComment)
+	commentRouteGroup.GET("/:id", handler.GetAllComments)
 
 	reactionRouteGroup := config.Router.Group("/post-reactions")
 	reactionRouteGroup.POST("", handler.ReactToPost)

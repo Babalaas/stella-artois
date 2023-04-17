@@ -4,11 +4,26 @@ import (
 	"babalaas/stella-artois/model"
 	"context"
 	"log"
+
+	"github.com/google/uuid"
 )
 
 // UserProfileService definition
 type UserProfileService struct {
 	UserProfileRepository model.UserProfileRepository
+}
+
+// GetDisplayName implements model.UserProfileService
+func (service *UserProfileService) GetDisplayName(ctx context.Context, userProfileID uuid.UUID) (string, error) {
+	userProfile, err := service.UserProfileRepository.FindByID(ctx, userProfileID)
+
+	if err != nil {
+		log.Fatal("Could not get user")
+		return "", err
+	}
+
+	return userProfile.DisplayName, err
+
 }
 
 // UPSConfig defines the dependencies for a UserProfileService

@@ -25,6 +25,7 @@ type UserProfile struct {
 type UserProfileService interface {
 	Register(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
 	LogIn(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
+	GetDisplayName(ctx context.Context, userProfileID uuid.UUID) (string, error)
 }
 
 // UserProfileRepository definition

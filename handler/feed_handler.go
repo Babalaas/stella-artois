@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// GenerateFeed returns posts to populate a users feed by id
 func (handler *Handler) GenerateFeed(c *gin.Context) {
 	reqID := c.Param("id")
 

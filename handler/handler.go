@@ -2,6 +2,7 @@ package handler
 
 import (
 	"babalaas/stella-artois/model"
+	"babalaas/stella-artois/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +14,7 @@ type Handler struct {
 	FriendshipService  model.FriendshipService
 	CommentService     model.CommentService
 	ReactionService    model.ReactionService
+	FeedService        service.FeedService
 }
 
 // Config holds services injected on handler initilization
@@ -25,6 +27,7 @@ type Config struct {
 	FriendshipService  model.FriendshipService
 	CommentService     model.CommentService
 	ReactionService    model.ReactionService
+	FeedService        service.FeedService
 }
 
 // NewHandler is a factory function which a new Handler struct
@@ -35,6 +38,7 @@ func NewHandler(config *Config) {
 		FriendshipService:  config.FriendshipService,
 		CommentService:     config.CommentService,
 		ReactionService:    config.ReactionService,
+		FeedService:        config.FeedService,
 	}
 
 	postRouteGroup := config.Router.Group("/posts")
@@ -50,7 +54,11 @@ func NewHandler(config *Config) {
 	commentRouteGroup := config.Router.Group("/post-comments")
 	commentRouteGroup.POST("", handler.CreatePostComment)
 	commentRouteGroup.DELETE("", handler.DeletePostComment)
+	commentRouteGroup.GET("/:id", handler.GetAllComments)
 
-	reactionRouteGroup := config.Router.Group("post-reactions")
+	reactionRouteGroup := config.Router.Group("/post-reactions")
 	reactionRouteGroup.POST("", handler.ReactToPost)
+
+	feedRouteGroup := config.Router.Group("/feed")
+	feedRouteGroup.GET("/:id", handler.GenerateFeed)
 }

@@ -86,3 +86,21 @@ func (handler *Handler) DeletePostComment(c *gin.Context) {
 		"deleted": "comment deleted successfully",
 	})
 }
+
+func (handler *Handler) GetAllComments(c *gin.Context) {
+	reqID := c.Param("id")
+
+	uid := uuid.Must(uuid.Parse(reqID))
+
+	resComments, resErr := handler.CommentService.GetAll(c.Request.Context(), uid)
+
+	if resErr != nil {
+		log.Panicf("Unable to get comemnts")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not get comments for post"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"comments": resComments,
+	})
+}

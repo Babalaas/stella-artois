@@ -31,6 +31,7 @@ type UserProfileService interface {
 type UserProfileRepository interface {
 	Create(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
 	FindByDisplayName(ctx context.Context, displayName string) (UserProfile, error)
+	FindByID(ctx context.Context, userProfileID uuid.UUID) (UserProfile, error)
 }
 
 // BeforeCreate is a hook called to initialize user_profile fields to default values

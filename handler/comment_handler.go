@@ -65,3 +65,47 @@ func (handler *Handler) DeletePostComment(c *gin.Context) {
 		"deleted": "successfully deleted post comment",
 	})
 }
+
+// GetAllComments takes a post id and returns all post comments associated with that post
+func (handler *Handler) GetAllComments(c *gin.Context) {
+	reqID := c.Param("id")
+
+	uid := uuid.Must(uuid.Parse(reqID))
+
+	resComments, resErr := handler.CommentService.GetAll(c.Request.Context(), uid)
+
+	if resErr != nil {
+		log.Panicf("Unable to get comemnts")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not get comments for post"})
+		return
+	}
+
+	var trimmedComments []struct {
+		ID            string `json:"id"`
+		UserProfileID string `json:"user_profile_id"`
+		DisplayName   string `json:"display_name"`
+		Content       string `json:"content"`
+	}
+	for _, comment := range resComments {
+		displayName, err := handler.UserProfileService.GetDisplayName(c.Request.Context(), comment.UserProfileID)
+
+		if err != nil {
+			log.Fatal("Could not find user profile by id")
+		}
+		trimmedComment := struct {
+			ID            string `json:"id"`
+			UserProfileID string `json:"user_profile_id"`
+			DisplayName   string `json:"display_name"`
+			Content       string `json:"content"`
+		}{
+			ID:            comment.ID.String(),
+			UserProfileID: comment.UserProfileID.String(),
+			DisplayName:   displayName,
+			Content:       comment.Content,
+		}
+		trimmedComments = append(trimmedComments, trimmedComment)
+	}
+
+	// Return list of users with only the desired fields
+	c.JSON(http.StatusOK, trimmedComments)
+}

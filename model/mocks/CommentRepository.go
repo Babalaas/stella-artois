@@ -54,6 +54,58 @@ func (_m *CommentRepository) Delete(ctx context.Context, commentID uuid.UUID) er
 	return r0
 }
 
+// GetAll provides a mock function with given fields: ctx, postID
+func (_m *CommentRepository) GetAll(ctx context.Context, postID uuid.UUID) ([]model.PostComment, error) {
+	ret := _m.Called(ctx, postID)
+
+	var r0 []model.PostComment
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]model.PostComment, error)); ok {
+		return rf(ctx, postID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []model.PostComment); ok {
+		r0 = rf(ctx, postID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.PostComment)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, postID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetRecent provides a mock function with given fields: ctx, postID, limit
+func (_m *CommentRepository) GetRecent(ctx context.Context, postID uuid.UUID, limit int) ([]model.PostComment, error) {
+	ret := _m.Called(ctx, postID, limit)
+
+	var r0 []model.PostComment
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, int) ([]model.PostComment, error)); ok {
+		return rf(ctx, postID, limit)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, int) []model.PostComment); ok {
+		r0 = rf(ctx, postID, limit)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.PostComment)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, int) error); ok {
+		r1 = rf(ctx, postID, limit)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewCommentRepository interface {
 	mock.TestingT
 	Cleanup(func())

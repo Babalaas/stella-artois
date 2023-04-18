@@ -13,6 +13,20 @@ type commentRepository struct {
 	DB *gorm.DB
 }
 
+// GetRecent implements model.CommentRepository
+func (repo *commentRepository) GetRecent(ctx context.Context, postID uuid.UUID, limit int) ([]model.PostComment, error) {
+	var comments []model.PostComment
+
+	err := repo.DB.Where("post_id = ?", postID).Order("date_created DESC").Limit(limit).Find(&comments).Error
+
+	if err != nil {
+		log.Panic("Can get recent comments")
+		return comments, err
+	}
+
+	return comments, err
+}
+
 // Create implements model.PostCommentRepository
 func (repo *commentRepository) Create(ctx context.Context, comment *model.PostComment) (model.PostComment, error) {
 	result := repo.DB.Create(&comment)

@@ -5,11 +5,22 @@ import (
 	"context"
 	"log"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type userProfileRepository struct {
 	DB *gorm.DB
+}
+
+// FindByID implements model.UserProfileRepository
+func (repo *userProfileRepository) FindByID(ctx context.Context, userProfileID uuid.UUID) (model.UserProfile, error) {
+	var resUserProfile model.UserProfile
+	if resErr := repo.DB.Where("id = ?", userProfileID).First(&resUserProfile).Error; resErr != nil {
+		log.Panic("User with id not found.")
+		return resUserProfile, resErr
+	}
+	return resUserProfile, nil
 }
 
 // Create implements model.UserProfileRepository
@@ -28,7 +39,7 @@ func (repo *userProfileRepository) Create(ctx context.Context, userProfile *mode
 func (repo *userProfileRepository) FindByDisplayName(ctx context.Context, displayName string) (model.UserProfile, error) {
 	var resUserProfile model.UserProfile
 	if resErr := repo.DB.Where("display_name = ?", displayName).First(&resUserProfile).Error; resErr != nil {
-		log.Panic("Post with id not found.")
+		log.Panic("User with display name not found.")
 		return resUserProfile, resErr
 	}
 	return resUserProfile, nil

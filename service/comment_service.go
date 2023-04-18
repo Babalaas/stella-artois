@@ -29,8 +29,8 @@ func (service *postCommentService) Create(ctx context.Context, comment *model.Po
 }
 
 // Delete implements model.PostCommentService
-func (service *postCommentService) Delete(ctx context.Context, comment *model.PostComment) error {
-	err := service.postCommentRepo.Delete(ctx, comment)
+func (service *postCommentService) Delete(ctx context.Context, commentID uuid.UUID) error {
+	err := service.postCommentRepo.Delete(ctx, commentID)
 	return err
 }
 

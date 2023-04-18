@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -14,14 +13,6 @@ import (
 type createPostCommentRequest struct {
 	UserProfileID uuid.UUID `json:"user_profile_id" binding:"required"`
 	PostID        uuid.UUID `json:"post_id" binding:"required"`
-	Content       string    `json:"content" binding:"required"`
-}
-
-type deletePostCommentRequest struct {
-	ID            uuid.UUID `json:"id" binding:"required"`
-	UserProfileID uuid.UUID `json:"user_profile_id" binding:"required"`
-	PostID        uuid.UUID `json:"post_id" binding:"required"`
-	DateCreated   time.Time `json:"date_created" binding:"required"`
 	Content       string    `json:"content" binding:"required"`
 }
 
@@ -58,32 +49,20 @@ func (handler *Handler) CreatePostComment(c *gin.Context) {
 
 // DeletePostComment is HTTP handler to delete one post comment by id
 func (handler *Handler) DeletePostComment(c *gin.Context) {
-	var req deletePostCommentRequest
+	reqID := c.Param("id")
 
-	if bindErr := c.ShouldBind(&req); bindErr != nil {
-		log.Panicf("Failed to bind post comment JSON input: %v\n", bindErr)
-		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
-		return
-	}
-
-	reqComment := &model.PostComment{
-		ID:            req.ID,
-		UserProfileID: req.UserProfileID,
-		PostID:        req.PostID,
-		DateCreated:   req.DateCreated,
-		Content:       req.Content,
-	}
-
-	err := handler.CommentService.Delete(c.Request.Context(), reqComment)
+	uid := uuid.Must(uuid.Parse(reqID))
+	ctx := c.Request.Context()
+	err := handler.CommentService.Delete(ctx, uid)
 
 	if err != nil {
-		log.Panicf("Unable to delete post")
+		log.Panicf("Unable to find post")
 		c.JSON(http.StatusNotFound, gin.H{"error": "Post record not found!"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"deleted": "comment deleted successfully",
+		"deleted": "successfully deleted post comment",
 	})
 }
 

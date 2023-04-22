@@ -16,6 +16,17 @@ type Friendship struct {
 	DateUpdated time.Time `gorm:"type:timestamp with time zone;not null"`
 }
 
+// UserProfile entity
+type Friend struct {
+	ID          uuid.UUID `json:"id" gorm:"type:uuid;primaryKey"`
+	DisplayName string    `json:"display_name" gorm:"type:varchar(30);not null"`
+	FirstName   string    `json:"first_name" gorm:"type:varchar(15);not null"`
+	LastName    string    `json:"last_name" gorm:"type:varchar(30);not null"`
+	Email       string    `json:"email" gorm:"type:varchar(255);not null"`
+	Phone       string    `json:"phone" gorm:"type:varchar(15);not null"`
+	ProfilePic  string    `json:"profile_pic" gorm:"type:text;not null"`
+}
+
 // BeforeCreate is a hook called to initialize Friendship fields to default values
 func (friendship *Friendship) BeforeCreate(db *gorm.DB) error {
 	friendship.Status = "Requested"
@@ -31,5 +42,5 @@ type FriendshipRepository interface {
 
 // FriendshipService defines the usecases involving friendships
 type FriendshipService interface {
-	GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]UserProfile, error)
+	GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]Friend, error)
 }

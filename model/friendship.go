@@ -16,7 +16,7 @@ type Friendship struct {
 	DateUpdated time.Time `gorm:"type:timestamp with time zone;not null"`
 }
 
-// UserProfile entity
+// Friend is used to communicate necessary fields about a friend to a user_profile
 type Friend struct {
 	ID          uuid.UUID `json:"id" gorm:"type:uuid;primaryKey"`
 	DisplayName string    `json:"display_name" gorm:"type:varchar(30);not null"`

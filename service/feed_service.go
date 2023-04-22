@@ -8,12 +8,14 @@ import (
 	"github.com/google/uuid"
 )
 
+// FeedPost represents one post in a user's feed
 type FeedPost struct {
 	UserProfile model.UserProfile
 	Post        model.Post
 	Comments    []model.PostComment
 }
 
+// FeedService generates the feed for a user
 type FeedService interface {
 	GenerateFeed(userProfileID uuid.UUID, ctx context.Context) ([]FeedPost, error)
 }
@@ -26,6 +28,7 @@ type feedService struct {
 	friendshipRepository  model.FriendshipRepository
 }
 
+// FeedServiceConfig acts a paramter object for creating new FeedServices
 type FeedServiceConfig struct {
 	UserProfileRepository model.UserProfileRepository
 	PostRepository        model.PostRepository
@@ -35,7 +38,7 @@ type FeedServiceConfig struct {
 }
 
 // GenerateFeed implements FeedService
-func (service *feedService) GenerateFeed(userProfileID uuid.UUID, ctx context.Context) ([]FeedPost, error) {
+func (service *feedService) GenerateFeed(ctx context.Context, userProfileID uuid.UUID) ([]FeedPost, error) {
 	var feedPosts []FeedPost
 
 	// GetAllFriendsPosts
@@ -78,6 +81,7 @@ func (service *feedService) GenerateFeed(userProfileID uuid.UUID, ctx context.Co
 	return feedPosts, err
 }
 
+// NewFeedService is the facory function for creating a FeedService
 func NewFeedService(config FeedServiceConfig) FeedService {
 	return &feedService{
 		userProfileRepository: config.UserProfileRepository,

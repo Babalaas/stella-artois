@@ -15,7 +15,7 @@ func (handler *Handler) GenerateFeed(c *gin.Context) {
 	uid := uuid.Must(uuid.Parse(reqID))
 	ctx := c.Request.Context()
 
-	feedPosts, err := handler.FeedService.GenerateFeed(uid, ctx)
+	feedPosts, err := handler.FeedService.GenerateFeed(ctx, uid)
 
 	if err != nil {
 		log.Panicf("Unable to get feed")

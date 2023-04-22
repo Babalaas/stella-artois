@@ -17,7 +17,7 @@ type FeedPost struct {
 
 // FeedService generates the feed for a user
 type FeedService interface {
-	GenerateFeed(userProfileID uuid.UUID, ctx context.Context) ([]FeedPost, error)
+	GenerateFeed(ctx context.Context, userProfileID uuid.UUID) ([]FeedPost, error)
 }
 
 type feedService struct {

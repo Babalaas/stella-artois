@@ -49,7 +49,7 @@ func (repo *friendshipRepository) AcceptFriendship(ctx context.Context, userProf
 	return err
 }
 
-// RemoveFriendship implements model.FriendshipRepository
+// RemoveFriendship can be used to reject a friendship request or remove a currenty friendship
 func (repo *friendshipRepository) RemoveFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
 	friendship, err := repo.FindFriendship(ctx, userProfileID, friendID)
 

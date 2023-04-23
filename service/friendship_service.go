@@ -12,6 +12,51 @@ type friendshipService struct {
 	friendshipRepo model.FriendshipRepository
 }
 
+// RemoveFriend implements model.FriendshipService
+func (service *friendshipService) RemoveFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	err := service.friendshipRepo.RemoveFriendship(ctx, userProfileID, friendID)
+
+	if err != nil {
+		log.Panic("Could not remove friend")
+	}
+
+	return err
+}
+
+// RequestFriend implements model.FriendshipService
+func (service *friendshipService) RequestFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	err := service.friendshipRepo.RequestFriendship(ctx, userProfileID, friendID)
+
+	if err != nil {
+		log.Panic("Could not generate friend request")
+	}
+
+	return err
+}
+
+// RespondToFriendshipRequest implements model.FriendshipService
+func (service *friendshipService) RespondToFriendshipRequest(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID, decision int) error {
+	_, err := service.friendshipRepo.FindFriendship(ctx, userProfileID, friendID)
+	if err != nil {
+		log.Panic("Could not find friendship")
+	}
+
+	if decision == 1 {
+		// accepted
+		err := service.friendshipRepo.AcceptFriendship(ctx, userProfileID, friendID)
+		if err != nil {
+			log.Panic("Could not accept friendship")
+		}
+		return err
+	}
+
+	err = service.friendshipRepo.RemoveFriendship(ctx, userProfileID, friendID)
+	if err != nil {
+		log.Panic("Could not remove friendship")
+	}
+	return err
+}
+
 // FSConfig is the paramter object used to create new Friendship Services
 // Holds required dependencies
 type FSConfig struct {

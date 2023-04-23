@@ -47,7 +47,7 @@ type FriendshipRepository interface {
 // FriendshipService defines the usecases involving friendships
 type FriendshipService interface {
 	GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]Friend, error)
-	RequestFriend(ctx, UserProfileID uuid.UUID, friendID uuid.UUID) error
-	RespondToFriendshipRequest(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
+	RequestFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
+	RespondToFriendshipRequest(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID, decision int) error
 	RemoveFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
 }

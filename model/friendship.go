@@ -10,8 +10,8 @@ import (
 
 // Friendship defines the friendship entity in the db
 type Friendship struct {
-	// requesterID  uuid.UUID `gorm:"type:uuid;not null"`
-	// responderID  uuid.UUID `gorm:"type:uuid;not null"`
+	requesterID uuid.UUID `gorm:"type:uuid;not null"`
+	responderID uuid.UUID `gorm:"type:uuid;not null"`
 	Status      string    `gorm:"type:varchar(10);not null"`
 	DateUpdated time.Time `gorm:"type:timestamp with time zone;not null"`
 }
@@ -38,9 +38,16 @@ func (friendship *Friendship) BeforeCreate(db *gorm.DB) error {
 type FriendshipRepository interface {
 	GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]UserProfile, error)
 	GetFriendsPosts(ctx context.Context, userProfileID uuid.UUID) ([]Post, error)
+	RequestFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
+	AcceptFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
+	RejectFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
+	RemoveFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
 }
 
 // FriendshipService defines the usecases involving friendships
 type FriendshipService interface {
 	GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]Friend, error)
+	RequestFriend(ctx, UserProfileID uuid.UUID, friendID uuid.UUID) error
+	RespondToFriendshipRequest(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
+	RemoveFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
 }

@@ -4,6 +4,7 @@ import (
 	"babalaas/stella-artois/model"
 	"context"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -11,6 +12,83 @@ import (
 
 type friendshipRepository struct {
 	DB *gorm.DB
+}
+
+// FindFriendship implements model.FriendshipRepository
+func (repo *friendshipRepository) FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (model.Friendship, error) {
+	friendship := model.Friendship{}
+	err := repo.DB.Find(friendship, "(requester_id = ? AND responder_id = ?) OR (requester_id = ? AND responder_id = ?)", userProfileID, friendID).Error
+	if err != nil {
+		return friendship, err
+	}
+
+	// Return the Friendship record if one was found
+	return friendship, nil
+}
+
+// AcceptFriendship implements model.FriendshipRepository
+func (repo *friendshipRepository) AcceptFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	friendship, err := repo.FindFriendship(ctx, userProfileID, friendID)
+
+	if err != nil {
+		log.Panic("could not find friendship")
+		return err
+	}
+
+	friendship.Status = "accepted"
+	friendship.DateUpdated = time.Now()
+
+	// Save the updated Friendship record to the database
+	err = repo.DB.Save(friendship).Error
+
+	if err != nil {
+		log.Panic("could not update friendship")
+		return err
+	}
+
+	return err
+}
+
+// RemoveFriendship implements model.FriendshipRepository
+func (repo *friendshipRepository) RemoveFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	friendship, err := repo.FindFriendship(ctx, userProfileID, friendID)
+
+	if err != nil {
+		log.Panic("could not find friendship")
+		return err
+	}
+
+	friendship.Status = "rejected"
+	friendship.DateUpdated = time.Now()
+
+	// Save the updated Friendship record to the database
+	err = repo.DB.Delete(friendship).Error
+
+	if err != nil {
+		log.Panic("could not delete friendship")
+		return err
+	}
+
+	return err
+}
+
+// RequestFriendship implements model.FriendshipRepository
+func (repo *friendshipRepository) RequestFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	friendship := model.Friendship{
+		RequesterID: userProfileID,
+		ResponderID: friendID,
+		Status:      "requested",
+		DateUpdated: time.Now(),
+	}
+
+	result := repo.DB.Create(&friendship)
+
+	if result.Error != nil {
+		log.Panic("Could not create new User Profile.")
+		return result.Error
+	}
+
+	return nil
 }
 
 // GetFriendsPosts implements model.FriendshipRepository

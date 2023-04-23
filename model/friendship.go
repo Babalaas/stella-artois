@@ -10,8 +10,8 @@ import (
 
 // Friendship defines the friendship entity in the db
 type Friendship struct {
-	requesterID uuid.UUID `gorm:"type:uuid;not null"`
-	responderID uuid.UUID `gorm:"type:uuid;not null"`
+	RequesterID uuid.UUID `gorm:"type:uuid;not null"`
+	ResponderID uuid.UUID `gorm:"type:uuid;not null"`
 	Status      string    `gorm:"type:varchar(10);not null"`
 	DateUpdated time.Time `gorm:"type:timestamp with time zone;not null"`
 }
@@ -40,8 +40,8 @@ type FriendshipRepository interface {
 	GetFriendsPosts(ctx context.Context, userProfileID uuid.UUID) ([]Post, error)
 	RequestFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
 	AcceptFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
-	RejectFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
 	RemoveFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
+	FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (Friendship, error)
 }
 
 // FriendshipService defines the usecases involving friendships

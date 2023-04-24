@@ -33,6 +33,7 @@ func (handler *Handler) GetAllFriends(c *gin.Context) {
 	})
 }
 
+// RequestFriend is the HTTP handler to request a friendship between two userProfileIDs
 func (handler *Handler) RequestFriend(c *gin.Context) {
 	var request friendshipRequest
 
@@ -57,6 +58,7 @@ func (handler *Handler) RequestFriend(c *gin.Context) {
 	})
 }
 
+// AcceptFriend is the HTTP handler to accept a friendship between two userProfileIDs
 func (handler *Handler) AcceptFriend(c *gin.Context) {
 	var req friendshipRequest
 
@@ -77,6 +79,7 @@ func (handler *Handler) AcceptFriend(c *gin.Context) {
 	})
 }
 
+// RequestFriend is the HTTP handler to reject or delete a friendship between two userProfileIDs
 func (handler *Handler) RemoveFriend(c *gin.Context) {
 	var req friendshipRequest
 

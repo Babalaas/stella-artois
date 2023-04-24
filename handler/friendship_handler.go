@@ -1,12 +1,18 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
+
+type friendshipRequest struct {
+	RequestUserProfileID  uuid.UUID `json:"request_user_profile_id" binding:"required"`
+	ResponseUserProfileID uuid.UUID `json:"response_user_profile_id" binding:"required"`
+}
 
 // GetAllFriends is the HTTP handler to return the passed userProfileID's friends in a list
 func (handler *Handler) GetAllFriends(c *gin.Context) {
@@ -24,5 +30,72 @@ func (handler *Handler) GetAllFriends(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"friends": friends,
+	})
+}
+
+// RequestFriend is the HTTP handler to request a friendship between two userProfileIDs
+func (handler *Handler) RequestFriend(c *gin.Context) {
+	var request friendshipRequest
+
+	if bindErr := c.ShouldBind(&request); bindErr != nil {
+		log.Panicf("Failed to bind friendshio JSON input: %v\n", bindErr)
+		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
+		return
+	}
+
+	err := handler.FriendshipService.RequestFriend(c, request.RequestUserProfileID, request.ResponseUserProfileID)
+
+	if err != nil {
+		log.Panicf("Failed to register user profile: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"frienship": "requested",
+	})
+}
+
+// AcceptFriend is the HTTP handler to accept a friendship between two userProfileIDs
+func (handler *Handler) AcceptFriend(c *gin.Context) {
+	var req friendshipRequest
+
+	if bindErr := c.ShouldBind(&req); bindErr != nil {
+		log.Panicf("Failed to bind friendshio JSON input: %v\n", bindErr)
+		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
+		return
+	}
+
+	err := handler.FriendshipService.AcceptFriend(c, req.RequestUserProfileID, req.ResponseUserProfileID)
+
+	if err != nil {
+		log.Panic("Failed to respond to request")
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"frienship": "updated",
+	})
+}
+
+// RequestFriend is the HTTP handler to reject or delete a friendship between two userProfileIDs
+func (handler *Handler) RemoveFriend(c *gin.Context) {
+	var req friendshipRequest
+
+	if bindErr := c.ShouldBind(&req); bindErr != nil {
+		log.Panicf("Failed to bind friendshio JSON input: %v\n", bindErr)
+		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
+		return
+	}
+
+	err := handler.FriendshipService.RemoveFriend(c, req.RequestUserProfileID, req.ResponseUserProfileID)
+
+	if err != nil {
+		log.Panic("Failed to remove friend")
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"frienship": "removed",
 	})
 }

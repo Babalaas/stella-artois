@@ -4,6 +4,7 @@ import (
 	"babalaas/stella-artois/model"
 	"context"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -11,6 +12,84 @@ import (
 
 type friendshipRepository struct {
 	DB *gorm.DB
+}
+
+// FindFriendship implements model.FriendshipRepository
+func (repo *friendshipRepository) FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (model.Friendship, error) {
+	var friendship model.Friendship
+
+	result := repo.DB.Where("(request_user_profile_id = ? AND response_user_profile_id = ?) OR (request_user_profile_id = ? AND response_user_profile_id = ?) AND status = ?", userProfileID, friendID, friendID, userProfileID, "accepted").First(&friendship)
+	if result.Error != nil {
+		return friendship, result.Error
+	}
+	return friendship, nil
+
+}
+
+// AcceptFriendship implements model.FriendshipRepository
+func (repo *friendshipRepository) AcceptFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	friendship, err := repo.FindFriendship(ctx, userProfileID, friendID)
+
+	if err != nil {
+		log.Panic("BAH HUMBUG", err)
+		return err
+	}
+
+	friendship.Status = "accepted"
+	friendship.DateUpdated = time.Now()
+
+	// Save the updated Friendship record to the database
+	err = repo.DB.Where("(request_user_profile_id = ? AND response_user_profile_id = ?) OR (request_user_profile_id = ? AND response_user_profile_id = ?) AND status = ?", userProfileID, friendID, friendID, userProfileID, "accepted").Save(&friendship).Error
+
+	if err != nil {
+		log.Panic("could not update friendship")
+		return err
+	}
+
+	return err
+}
+
+// RemoveFriendship can be used to reject a friendship request or remove a currenty friendship
+func (repo *friendshipRepository) RemoveFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	friendship, err := repo.FindFriendship(ctx, userProfileID, friendID)
+
+	if err != nil {
+		log.Panic("could not find friendship")
+		return err
+	}
+
+	friendship.Status = "rejected"
+	friendship.DateUpdated = time.Now()
+
+	// Save the updated Friendship record to the database
+	//err = repo.DB.Delete(friendship).Error
+	err = repo.DB.Where("(request_user_profile_id = ? AND response_user_profile_id = ?) OR (request_user_profile_id = ? AND response_user_profile_id = ?) AND status = ?", userProfileID, friendID, friendID, userProfileID, "accepted").Delete(&friendship).Error
+
+	if err != nil {
+		log.Panic("could not delete friendship")
+		return err
+	}
+
+	return err
+}
+
+// RequestFriendship implements model.FriendshipRepository
+func (repo *friendshipRepository) RequestFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	friendship := model.Friendship{
+		RequestUserProfileID:  userProfileID,
+		ResponseUserProfileID: friendID,
+		Status:                "requested",
+		DateUpdated:           time.Now(),
+	}
+
+	result := repo.DB.Create(&friendship)
+
+	if result.Error != nil {
+		log.Panic("Could not create new User Profile.")
+		return result.Error
+	}
+
+	return nil
 }
 
 // GetFriendsPosts implements model.FriendshipRepository

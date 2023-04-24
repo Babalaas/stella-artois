@@ -10,14 +10,8 @@ import (
 )
 
 type friendshipRequest struct {
-	RequesterID uuid.UUID
-	ResponderID uuid.UUID
-}
-
-type friendshipResponseRequest struct {
-	RequesterID uuid.UUID
-	ResponderID uuid.UUID
-	decision    int
+	RequestUserProfileID  uuid.UUID `json:"request_user_profile_id" binding:"required"`
+	ResponseUserProfileID uuid.UUID `json:"response_user_profile_id" binding:"required"`
 }
 
 // GetAllFriends is the HTTP handler to return the passed userProfileID's friends in a list
@@ -48,7 +42,7 @@ func (handler *Handler) RequestFriend(c *gin.Context) {
 		return
 	}
 
-	err := handler.FriendshipService.RequestFriend(c, request.RequesterID, request.ResponderID)
+	err := handler.FriendshipService.RequestFriend(c, request.RequestUserProfileID, request.ResponseUserProfileID)
 
 	if err != nil {
 		log.Panicf("Failed to register user profile: %v\n", err)
@@ -63,8 +57,8 @@ func (handler *Handler) RequestFriend(c *gin.Context) {
 	})
 }
 
-func (handler *Handler) RepondToFriendRequest(c *gin.Context) {
-	var req friendshipResponseRequest
+func (handler *Handler) AcceptFriend(c *gin.Context) {
+	var req friendshipRequest
 
 	if bindErr := c.ShouldBind(&req); bindErr != nil {
 		log.Panicf("Failed to bind friendshio JSON input: %v\n", bindErr)
@@ -72,7 +66,7 @@ func (handler *Handler) RepondToFriendRequest(c *gin.Context) {
 		return
 	}
 
-	err := handler.FriendshipService.RespondToFriendshipRequest(c, req.RequesterID, req.ResponderID, req.decision)
+	err := handler.FriendshipService.AcceptFriend(c, req.RequestUserProfileID, req.ResponseUserProfileID)
 
 	if err != nil {
 		log.Panic("Failed to respond to request")
@@ -84,7 +78,7 @@ func (handler *Handler) RepondToFriendRequest(c *gin.Context) {
 }
 
 func (handler *Handler) RemoveFriend(c *gin.Context) {
-	var req friendshipResponseRequest
+	var req friendshipRequest
 
 	if bindErr := c.ShouldBind(&req); bindErr != nil {
 		log.Panicf("Failed to bind friendshio JSON input: %v\n", bindErr)
@@ -92,7 +86,7 @@ func (handler *Handler) RemoveFriend(c *gin.Context) {
 		return
 	}
 
-	err := handler.FriendshipService.RemoveFriend(c, req.RequesterID, req.ResponderID)
+	err := handler.FriendshipService.RemoveFriend(c, req.RequestUserProfileID, req.ResponseUserProfileID)
 
 	if err != nil {
 		log.Panic("Failed to remove friend")

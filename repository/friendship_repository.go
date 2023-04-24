@@ -16,14 +16,14 @@ type friendshipRepository struct {
 
 // FindFriendship implements model.FriendshipRepository
 func (repo *friendshipRepository) FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (model.Friendship, error) {
-	friendship := model.Friendship{}
-	err := repo.DB.Find(friendship, "(requester_id = ? AND responder_id = ?) OR (requester_id = ? AND responder_id = ?)", userProfileID, friendID).Error
-	if err != nil {
-		return friendship, err
-	}
+	var friendship model.Friendship
 
-	// Return the Friendship record if one was found
+	result := repo.DB.Where("(request_user_profile_id = ? AND response_user_profile_id = ?) OR (request_user_profile_id = ? AND response_user_profile_id = ?) AND status = ?", userProfileID, friendID, friendID, userProfileID, "accepted").First(&friendship)
+	if result.Error != nil {
+		return friendship, result.Error
+	}
 	return friendship, nil
+
 }
 
 // AcceptFriendship implements model.FriendshipRepository
@@ -31,7 +31,7 @@ func (repo *friendshipRepository) AcceptFriendship(ctx context.Context, userProf
 	friendship, err := repo.FindFriendship(ctx, userProfileID, friendID)
 
 	if err != nil {
-		log.Panic("could not find friendship")
+		log.Panic("BAH HUMBUG", err)
 		return err
 	}
 
@@ -39,7 +39,7 @@ func (repo *friendshipRepository) AcceptFriendship(ctx context.Context, userProf
 	friendship.DateUpdated = time.Now()
 
 	// Save the updated Friendship record to the database
-	err = repo.DB.Save(friendship).Error
+	err = repo.DB.Where("(request_user_profile_id = ? AND response_user_profile_id = ?) OR (request_user_profile_id = ? AND response_user_profile_id = ?) AND status = ?", userProfileID, friendID, friendID, userProfileID, "accepted").Save(&friendship).Error
 
 	if err != nil {
 		log.Panic("could not update friendship")
@@ -62,7 +62,8 @@ func (repo *friendshipRepository) RemoveFriendship(ctx context.Context, userProf
 	friendship.DateUpdated = time.Now()
 
 	// Save the updated Friendship record to the database
-	err = repo.DB.Delete(friendship).Error
+	//err = repo.DB.Delete(friendship).Error
+	err = repo.DB.Where("(request_user_profile_id = ? AND response_user_profile_id = ?) OR (request_user_profile_id = ? AND response_user_profile_id = ?) AND status = ?", userProfileID, friendID, friendID, userProfileID, "accepted").Delete(&friendship).Error
 
 	if err != nil {
 		log.Panic("could not delete friendship")
@@ -75,10 +76,10 @@ func (repo *friendshipRepository) RemoveFriendship(ctx context.Context, userProf
 // RequestFriendship implements model.FriendshipRepository
 func (repo *friendshipRepository) RequestFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
 	friendship := model.Friendship{
-		RequesterID: userProfileID,
-		ResponderID: friendID,
-		Status:      "requested",
-		DateUpdated: time.Now(),
+		RequestUserProfileID:  userProfileID,
+		ResponseUserProfileID: friendID,
+		Status:                "requested",
+		DateUpdated:           time.Now(),
 	}
 
 	result := repo.DB.Create(&friendship)

@@ -35,24 +35,15 @@ func (service *friendshipService) RequestFriend(ctx context.Context, userProfile
 }
 
 // RespondToFriendshipRequest implements model.FriendshipService
-func (service *friendshipService) RespondToFriendshipRequest(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID, decision int) error {
+func (service *friendshipService) AcceptFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
 	_, err := service.friendshipRepo.FindFriendship(ctx, userProfileID, friendID)
 	if err != nil {
 		log.Panic("Could not find friendship")
 	}
 
-	if decision == 1 {
-		// accepted
-		err := service.friendshipRepo.AcceptFriendship(ctx, userProfileID, friendID)
-		if err != nil {
-			log.Panic("Could not accept friendship")
-		}
-		return err
-	}
-
-	err = service.friendshipRepo.RemoveFriendship(ctx, userProfileID, friendID)
+	err = service.friendshipRepo.AcceptFriendship(ctx, userProfileID, friendID)
 	if err != nil {
-		log.Panic("Could not remove friendship")
+		log.Panic("Could not accept friendship")
 	}
 	return err
 }

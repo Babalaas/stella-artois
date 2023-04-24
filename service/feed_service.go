@@ -15,7 +15,7 @@ type FeedPost struct {
 }
 
 type author struct {
-	UserProfileID uuid.UUID `json:"request_user_profile_id"`
+	UserProfileID uuid.UUID `json:"user_profile_id"`
 	DisplayName   string    `json:"display_name"`
 	ProfilePic    string    `json:"profile_pic"`
 }

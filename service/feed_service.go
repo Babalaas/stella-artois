@@ -10,9 +10,29 @@ import (
 
 // FeedPost represents one post in a user's feed
 type FeedPost struct {
-	UserProfile model.UserProfile
-	Post        model.Post
-	Comments    []model.PostComment
+	Author      author       `json:"author"`
+	Post        post         `json:"post"`
+	TopComments []topComment `json:"top_comments"`
+}
+
+type author struct {
+	UserProfileID uuid.UUID `json:"request_user_profile_id"`
+	DisplayName   string    `json:"display_name"`
+	ProfilePic    string    `json:"profile_pic"`
+}
+
+type post struct {
+	ID            uuid.UUID `json:"id"`
+	Image         string    `json:"image"`
+	Image2        string    `json:"image_2"`
+	Caption       string    `json:"caption"`
+	ReactionCount int       `json:"reaction_count"`
+}
+
+type topComment struct {
+	UserProfileID uuid.UUID `json:"user_profile_id"`
+	DisplayName   string    `json:"display_name"`
+	Content       string    `json:"content"`
 }
 
 // FeedService generates the feed for a user
@@ -51,13 +71,13 @@ func (service *feedService) GenerateFeed(ctx context.Context, userProfileID uuid
 
 	// Build FeedPost structs
 	for i := range posts {
-		post, err := service.postRepository.GetByID(ctx, posts[i].ID)
+		iPost, err := service.postRepository.GetByID(ctx, posts[i].ID)
 
 		if err != nil {
 			log.Fatal("OOF")
 		}
 
-		userProfile, err := service.userProfileRepository.FindByID(ctx, post.UserProfileID)
+		userProfile, err := service.userProfileRepository.FindByID(ctx, iPost.UserProfileID)
 
 		if err != nil {
 			log.Fatal("OOF")
@@ -69,10 +89,31 @@ func (service *feedService) GenerateFeed(ctx context.Context, userProfileID uuid
 			log.Fatal("OOF")
 		}
 
+		var topComments []topComment
+		for _, comment := range comments {
+			commentAuthor, _ := service.userProfileRepository.FindByID(ctx, comment.UserProfileID)
+			newTopComment := topComment{
+				UserProfileID: comment.UserProfileID,
+				DisplayName:   commentAuthor.DisplayName,
+				Content:       comment.Content,
+			}
+			topComments = append(topComments, newTopComment)
+		}
+
 		feedPost := FeedPost{
-			UserProfile: userProfile,
-			Post:        post,
-			Comments:    comments,
+			Author: author{
+				UserProfileID: userProfile.ID,
+				DisplayName:   userProfile.DisplayName,
+				ProfilePic:    userProfile.ProfilePic,
+			},
+			Post: post{
+				ID:            iPost.ID,
+				Image:         iPost.Image,
+				Image2:        iPost.Image2,
+				Caption:       iPost.Caption,
+				ReactionCount: iPost.ReactionCount,
+			},
+			TopComments: topComments,
 		}
 
 		feedPosts = append(feedPosts, feedPost)

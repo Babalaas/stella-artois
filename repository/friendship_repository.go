@@ -17,10 +17,10 @@ type friendshipRepository struct {
 func (repo *friendshipRepository) GetFriendsPosts(ctx context.Context, userProfileID uuid.UUID) ([]model.Post, error) {
 	var posts []model.Post
 
-	err := repo.DB.Joins("JOIN user_profile ON post.user_profile_id = user_profile.id").
-		Joins("JOIN friendship f1 ON post.user_profile_id = f1.response_user_profile_id").
-		Joins("JOIN friendship f2 ON post.user_profile_id = f2.request_user_profile_id").
-		Where("(f1.request_user_profile_id = ? AND f1.status = ?) OR (f2.response_user_profile_id = ? AND f2.status = ?)", userProfileID, "accepted", userProfileID, "accepted").
+	err := repo.DB.Table("post").
+		Select("post.*").
+		Joins("JOIN friendship ON (post.user_profile_id = friendship.response_user_profile_id OR post.user_profile_id = friendship.request_user_profile_id)").
+		Where("(friendship.request_user_profile_id = ? OR friendship.response_user_profile_id = ?) AND friendship.status = ?", userProfileID, userProfileID, "accepted").
 		Find(&posts).Error
 
 	if err != nil {

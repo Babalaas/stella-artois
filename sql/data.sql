@@ -244,3 +244,17 @@ VALUES
   (1, 
   'Like', 
   'https://png.pngtree.com/png-vector/20190224/ourmid/pngtree-vector-like-icon-png-image_699751.jpg');
+
+
+INSERT INTO "public".post_comment
+  (id, 
+  post_id, 
+  user_profile_id, 
+  date_created, 
+  content) 
+VALUES 
+  ('95f709f0-e260-11ed-b5ea-0242ac120002', 
+  '0b318a7a-7cad-11ed-a1eb-0242ac120002', 
+  '4f9da08c-62eb-4dc0-9ab5-0d7183437695', 
+  '2022-08-12 21:37:00-05', 
+  'Home is where the heart is');

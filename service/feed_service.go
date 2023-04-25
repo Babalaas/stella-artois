@@ -30,6 +30,7 @@ type post struct {
 }
 
 type topComment struct {
+	ID            uuid.UUID `json:"id"`
 	UserProfileID uuid.UUID `json:"user_profile_id"`
 	DisplayName   string    `json:"display_name"`
 	Content       string    `json:"content"`
@@ -93,6 +94,7 @@ func (service *feedService) GenerateFeed(ctx context.Context, userProfileID uuid
 		for _, comment := range comments {
 			commentAuthor, _ := service.userProfileRepository.FindByID(ctx, comment.UserProfileID)
 			newTopComment := topComment{
+				ID:            comment.ID,
 				UserProfileID: comment.UserProfileID,
 				DisplayName:   commentAuthor.DisplayName,
 				Content:       comment.Content,

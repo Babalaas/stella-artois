@@ -14,6 +14,20 @@ type friendshipRepository struct {
 	DB *gorm.DB
 }
 
+// GetPendingFriendships implements model.FriendshipRepository
+func (repo *friendshipRepository) GetPendingFriendships(ctx context.Context, userProfileID uuid.UUID) ([]model.UserProfile, error) {
+	var userProfiles []model.UserProfile
+	err := repo.DB.Table("user_profile").
+		Joins("INNER JOIN friendship ON friendship.request_user_profile_id = user_profile.id").
+		Where("friendship.response_user_profile_id = ? AND friendship.status = ?", userProfileID, "requested").
+		Find(&userProfiles).Error
+	if err != nil {
+		log.Panic("Could not get pending friendships")
+		return userProfiles, err
+	}
+	return userProfiles, err
+}
+
 // FindFriendship implements model.FriendshipRepository
 func (repo *friendshipRepository) FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (model.Friendship, error) {
 	var friendship model.Friendship

@@ -99,3 +99,22 @@ func (handler *Handler) RemoveFriend(c *gin.Context) {
 		"frienship": "removed",
 	})
 }
+
+// GetFriendRequests is the HTTP handler to return the passed userProfileID's friends in a list
+func (handler *Handler) GetFriendRequests(c *gin.Context) {
+	reqID := c.Param("id")
+
+	uid := uuid.Must(uuid.Parse(reqID))
+	ctx := c.Request.Context()
+	friendRequesters, err := handler.FriendshipService.GetFriendRequests(ctx, uid)
+
+	if err != nil {
+		log.Panicf("Friendship Handler: Unable to get friend requests")
+		c.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"friend_requests": friendRequesters,
+	})
+}

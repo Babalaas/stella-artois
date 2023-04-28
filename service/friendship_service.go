@@ -12,6 +12,16 @@ type friendshipService struct {
 	friendshipRepo model.FriendshipRepository
 }
 
+// GetFriendRequests implements model.FriendshipService
+func (service *friendshipService) GetFriendRequests(ctx context.Context, userProfileID uuid.UUID) ([]model.UserProfile, error) {
+	friendships, err := service.friendshipRepo.GetPendingFriendships(ctx, userProfileID)
+	if err != nil {
+		log.Panic("Could not find friend requests")
+	}
+
+	return friendships, err
+}
+
 // RemoveFriend implements model.FriendshipService
 func (service *friendshipService) RemoveFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
 	err := service.friendshipRepo.RemoveFriendship(ctx, userProfileID, friendID)

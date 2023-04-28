@@ -16,7 +16,8 @@ type userProfileRepository struct {
 // SearchyByDisplayName implements model.UserProfileRepository
 func (repo *userProfileRepository) SearchyByDisplayName(ctx context.Context, displayName string) ([]model.UserProfile, error) {
 	var userProfiles []model.UserProfile
-	err := repo.DB.Where("display_name = ?", displayName).Find(&userProfiles).Error
+	query := "%" + displayName + "%"
+	err := repo.DB.Where("display_name LIKE ?", query).Find(&userProfiles).Error
 	if err != nil {
 		return nil, err
 	}

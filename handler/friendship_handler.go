@@ -100,7 +100,7 @@ func (handler *Handler) RemoveFriend(c *gin.Context) {
 	})
 }
 
-// GetFriendRequest is the HTTP handler to return the passed userProfileID's friends in a list
+// GetFriendRequests is the HTTP handler to return the passed userProfileID's friends in a list
 func (handler *Handler) GetFriendRequests(c *gin.Context) {
 	reqID := c.Param("id")
 

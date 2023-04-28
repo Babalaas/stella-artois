@@ -19,7 +19,7 @@ func (repo *friendshipRepository) GetPendingFriendships(ctx context.Context, use
 	var userProfiles []model.UserProfile
 	err := repo.DB.Table("user_profile").
 		Joins("INNER JOIN friendship ON friendship.request_user_profile_id = user_profile.id").
-		Where("friendship.response_user_profile_id = ? AND friendship.status = ?", userProfileID, "pending").
+		Where("friendship.response_user_profile_id = ? AND friendship.status = ?", userProfileID, "requested").
 		Find(&userProfiles).Error
 	if err != nil {
 		log.Panic("Could not get pending friendships")

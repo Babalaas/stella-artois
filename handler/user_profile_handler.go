@@ -98,6 +98,7 @@ func (handler *Handler) LogIn(c *gin.Context) {
 	})
 }
 
+// Search returns a list of users wiith displayanmes that contain the query text
 func (handler *Handler) Search(c *gin.Context) {
 	var req searchRequest
 

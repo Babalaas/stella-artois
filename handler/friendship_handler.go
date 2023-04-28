@@ -79,7 +79,7 @@ func (handler *Handler) AcceptFriend(c *gin.Context) {
 	})
 }
 
-// RequestFriend is the HTTP handler to reject or delete a friendship between two userProfileIDs
+// RemoveFriend is the HTTP handler to reject or delete a friendship between two userProfileIDs
 func (handler *Handler) RemoveFriend(c *gin.Context) {
 	var req friendshipRequest
 

@@ -26,6 +26,10 @@ type logInRequest struct {
 	Password    string `json:"password" binding:"required"`
 }
 
+type searchRequest struct {
+	Query string `json:"query" binding:"required"`
+}
+
 // Register handles the HTTP request to create one new user_profile entity
 // and store it in the database.
 func (handler *Handler) Register(c *gin.Context) {
@@ -95,8 +99,14 @@ func (handler *Handler) LogIn(c *gin.Context) {
 }
 
 func (handler *Handler) Search(c *gin.Context) {
-	var query string
+	var req searchRequest
+	if bindErr := c.ShouldBind(&req); bindErr != nil {
+		log.Panicf("Failed to bind search JSON input: %v\n", bindErr)
+		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
+		return
+	}
 
+	query := req.Query
 	ctx := c.Request.Context()
 	userProfiles, err := handler.UserProfileService.Search(ctx, query)
 

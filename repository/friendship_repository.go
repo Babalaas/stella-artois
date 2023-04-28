@@ -14,6 +14,11 @@ type friendshipRepository struct {
 	DB *gorm.DB
 }
 
+// GetPendingFriendships implements model.FriendshipRepository
+func (*friendshipRepository) GetPendingFriendships(ctx context.Context, userProfileID uuid.UUID) ([]model.UserProfile, error) {
+	panic("unimplemented")
+}
+
 // FindFriendship implements model.FriendshipRepository
 func (repo *friendshipRepository) FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (model.Friendship, error) {
 	var friendship model.Friendship

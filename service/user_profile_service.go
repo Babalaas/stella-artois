@@ -13,6 +13,15 @@ type UserProfileService struct {
 	UserProfileRepository model.UserProfileRepository
 }
 
+// Search implements model.UserProfileService
+func (service *UserProfileService) Search(ctx context.Context, displayName string) ([]model.UserProfile, error) {
+	userProfiles, err := service.UserProfileRepository.SearchyByDisplayName(ctx, displayName)
+	if err != nil {
+		log.Fatal("Could not search for user profiles")
+	}
+	return userProfiles, err
+}
+
 // GetDisplayName implements model.UserProfileService
 func (service *UserProfileService) GetDisplayName(ctx context.Context, userProfileID uuid.UUID) (string, error) {
 	userProfile, err := service.UserProfileRepository.FindByID(ctx, userProfileID)

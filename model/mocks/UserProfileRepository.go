@@ -88,6 +88,32 @@ func (_m *UserProfileRepository) FindByID(ctx context.Context, userProfileID uui
 	return r0, r1
 }
 
+// SearchyByDisplayName provides a mock function with given fields: ctx, displayName
+func (_m *UserProfileRepository) SearchyByDisplayName(ctx context.Context, displayName string) ([]model.UserProfile, error) {
+	ret := _m.Called(ctx, displayName)
+
+	var r0 []model.UserProfile
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) ([]model.UserProfile, error)); ok {
+		return rf(ctx, displayName)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) []model.UserProfile); ok {
+		r0 = rf(ctx, displayName)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.UserProfile)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, displayName)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 type mockConstructorTestingTNewUserProfileRepository interface {
 	mock.TestingT
 	Cleanup(func())

@@ -13,6 +13,18 @@ type userProfileRepository struct {
 	DB *gorm.DB
 }
 
+// SearchyByDisplayName implements model.UserProfileRepository
+func (repo *userProfileRepository) SearchyByDisplayName(ctx context.Context, displayName string) ([]model.UserProfile, error) {
+	var userProfiles []model.UserProfile
+	query := "%" + displayName + "%"
+	err := repo.DB.Where("display_name LIKE ?", query).Find(&userProfiles).Error
+	if err != nil {
+		return nil, err
+	}
+	return userProfiles, nil
+
+}
+
 // FindByID implements model.UserProfileRepository
 func (repo *userProfileRepository) FindByID(ctx context.Context, userProfileID uuid.UUID) (model.UserProfile, error) {
 	var resUserProfile model.UserProfile

@@ -47,6 +47,7 @@ func NewHandler(config *Config) {
 	userProfileRouteGroup := config.Router.Group("/user-profiles")
 	userProfileRouteGroup.POST("", handler.Register)
 	userProfileRouteGroup.POST("/login", handler.LogIn)
+	userProfileRouteGroup.GET("", handler.Search)
 
 	friendshipRouteGroup := config.Router.Group("/friends")
 	friendshipRouteGroup.GET("/:id", handler.GetAllFriends)

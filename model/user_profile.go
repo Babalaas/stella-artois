@@ -26,6 +26,7 @@ type UserProfileService interface {
 	Register(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
 	LogIn(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
 	GetDisplayName(ctx context.Context, userProfileID uuid.UUID) (string, error)
+	Search(ctx context.Context, displayName string) ([]UserProfile, error)
 }
 
 // UserProfileRepository definition
@@ -33,6 +34,7 @@ type UserProfileRepository interface {
 	Create(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
 	FindByDisplayName(ctx context.Context, displayName string) (UserProfile, error)
 	FindByID(ctx context.Context, userProfileID uuid.UUID) (UserProfile, error)
+	SearchyByDisplayName(ctx context.Context, displayName string) ([]UserProfile, error)
 }
 
 // BeforeCreate is a hook called to initialize user_profile fields to default values

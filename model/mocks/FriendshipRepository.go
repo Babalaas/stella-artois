@@ -16,6 +16,44 @@ type FriendshipRepository struct {
 	mock.Mock
 }
 
+// AcceptFriendship provides a mock function with given fields: ctx, userProfileID, friendID
+func (_m *FriendshipRepository) AcceptFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	ret := _m.Called(ctx, userProfileID, friendID)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r0 = rf(ctx, userProfileID, friendID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// FindFriendship provides a mock function with given fields: ctx, userProfileID, friendID
+func (_m *FriendshipRepository) FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (model.Friendship, error) {
+	ret := _m.Called(ctx, userProfileID, friendID)
+
+	var r0 model.Friendship
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (model.Friendship, error)); ok {
+		return rf(ctx, userProfileID, friendID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) model.Friendship); ok {
+		r0 = rf(ctx, userProfileID, friendID)
+	} else {
+		r0 = ret.Get(0).(model.Friendship)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r1 = rf(ctx, userProfileID, friendID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetAllFriends provides a mock function with given fields: ctx, userProfileID
 func (_m *FriendshipRepository) GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]model.UserProfile, error) {
 	ret := _m.Called(ctx, userProfileID)
@@ -66,6 +104,34 @@ func (_m *FriendshipRepository) GetFriendsPosts(ctx context.Context, userProfile
 	}
 
 	return r0, r1
+}
+
+// RemoveFriendship provides a mock function with given fields: ctx, userProfileID, friendID
+func (_m *FriendshipRepository) RemoveFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	ret := _m.Called(ctx, userProfileID, friendID)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r0 = rf(ctx, userProfileID, friendID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// RequestFriendship provides a mock function with given fields: ctx, userProfileID, friendID
+func (_m *FriendshipRepository) RequestFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
+	ret := _m.Called(ctx, userProfileID, friendID)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r0 = rf(ctx, userProfileID, friendID)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 type mockConstructorTestingTNewFriendshipRepository interface {

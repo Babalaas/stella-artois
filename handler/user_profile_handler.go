@@ -100,7 +100,8 @@ func (handler *Handler) LogIn(c *gin.Context) {
 
 func (handler *Handler) Search(c *gin.Context) {
 	var req searchRequest
-	if bindErr := c.ShouldBind(&req); bindErr != nil {
+
+	if bindErr := c.ShouldBindJSON(&req); bindErr != nil {
 		log.Panicf("Failed to bind search JSON input: %v\n", bindErr)
 		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
 		return

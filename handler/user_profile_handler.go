@@ -93,3 +93,22 @@ func (handler *Handler) LogIn(c *gin.Context) {
 		"user_profile": userProfile,
 	})
 }
+
+func (handler *Handler) Search(c *gin.Context) {
+	var query string
+
+	ctx := c.Request.Context()
+	userProfiles, err := handler.UserProfileService.Search(ctx, query)
+
+	if err != nil {
+		log.Printf("Failed to seach for user profiles: %v\n", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"results": userProfiles,
+	})
+}

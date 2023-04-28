@@ -51,6 +51,7 @@ func NewHandler(config *Config) {
 
 	friendshipRouteGroup := config.Router.Group("/friends")
 	friendshipRouteGroup.GET("/:id", handler.GetAllFriends)
+	friendshipRouteGroup.GET("/requests/:id", handler.GetFriendRequests)
 	friendshipRouteGroup.POST("", handler.RequestFriend)
 	friendshipRouteGroup.PATCH("", handler.AcceptFriend)
 	friendshipRouteGroup.DELETE("", handler.RemoveFriend)

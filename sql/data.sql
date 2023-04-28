@@ -154,6 +154,17 @@ VALUES
     '2001-03-28',
     'password',
     'https://library.sportingnews.com/styles/crop_style_16_9_mobile_2x/s3/2023-03/GettyImages-1471642056.jpg?itok=Mcrb_5re'
+  ),
+  (
+    '4725c52c-c30b-4164-b2c3-440448e136f1',
+    'jalenhurts',
+    'Jalen',
+    'Hurts',
+    'hurts1@eagles.com',
+    '2678675309',
+    '1998-08-07',
+    'password',
+    'https://static.clubs.nfl.com/image/private/t_editorial_landscape_mobile/f_auto/v1628455300/eagles/zuftq3b6azlzvkoznb2v.jpg'
   );
 
   INSERT INTO
@@ -234,6 +245,12 @@ VALUES
     '12b02b58-7cad-11ed-a1eb-0242ac120002',
     '4f9da08c-62eb-4dc0-9ab5-0d7183437695',
     'accepted',
+    '2023-03-26 23:47:00-5'
+  ),
+  (
+    '4725c52c-c30b-4164-b2c3-440448e136f1',
+    '12b02b58-7cad-11ed-a1eb-0242ac120002',
+    'requested',
     '2023-03-26 23:47:00-5'
   );
 INSERT INTO "public".reaction

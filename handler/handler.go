@@ -15,6 +15,7 @@ type Handler struct {
 	CommentService     model.CommentService
 	ReactionService    model.ReactionService
 	FeedService        service.FeedService
+	CollectionService  model.CollectionService
 }
 
 // Config holds services injected on handler initilization
@@ -28,6 +29,7 @@ type Config struct {
 	CommentService     model.CommentService
 	ReactionService    model.ReactionService
 	FeedService        service.FeedService
+	CollectionService  model.CollectionService
 }
 
 // NewHandler is a factory function which a new Handler struct
@@ -39,6 +41,7 @@ func NewHandler(config *Config) {
 		CommentService:     config.CommentService,
 		ReactionService:    config.ReactionService,
 		FeedService:        config.FeedService,
+		CollectionService:  config.CollectionService,
 	}
 
 	postRouteGroup := config.Router.Group("/posts")
@@ -66,4 +69,7 @@ func NewHandler(config *Config) {
 
 	feedRouteGroup := config.Router.Group("/feed")
 	feedRouteGroup.GET("/:id", handler.GenerateFeed)
+
+	collectionRouteGroup := config.Router.Group("/collections")
+	collectionRouteGroup.POST("", handler.CreateEmptyCollection)
 }

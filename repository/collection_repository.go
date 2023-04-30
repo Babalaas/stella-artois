@@ -17,7 +17,8 @@ func (repo *collectionRepository) Create(ctx context.Context, collection model.C
 	return result
 }
 
-func NewCollectionRepository(db *gorm.DB) model.CollectionRepoistory {
+// NewCollectionRepository is the factory function for created collection repos
+func NewCollectionRepository(db *gorm.DB) model.CollectionRepository {
 	return &collectionRepository{
 		DB: db,
 	}

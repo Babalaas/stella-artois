@@ -6,12 +6,13 @@ import (
 	"log"
 )
 
-type COLSConfig struct {
-	CollectionRepo model.CollectionRepoistory
+// CollectionServiceConfig is the parameter object for creating a Collection Service
+type CollectionServiceConfig struct {
+	CollectionRepo model.CollectionRepository
 }
 
 type collectionService struct {
-	collectionRepo model.CollectionRepoistory
+	collectionRepo model.CollectionRepository
 }
 
 // CreateEmptyCollection implements model.CollectionService
@@ -23,7 +24,8 @@ func (service *collectionService) CreateEmptyCollection(ctx context.Context, col
 	return err
 }
 
-func NewCollectionService(config COLSConfig) model.CollectionService {
+// NewCollectionService is the factory function for created collection services
+func NewCollectionService(config CollectionServiceConfig) model.CollectionService {
 	return &collectionService{
 		collectionRepo: config.CollectionRepo,
 	}

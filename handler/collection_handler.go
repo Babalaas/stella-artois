@@ -17,6 +17,7 @@ type createEmptyRequest struct {
 	Name          string    `json:"name" binding:"required"`
 }
 
+// CreateEmptyCollection is the HTTP handler for a user_profile to create an empty collection
 func (handler *Handler) CreateEmptyCollection(c *gin.Context) {
 	var req createEmptyRequest
 

@@ -72,7 +72,7 @@ func inject() (*gin.Engine, error) {
 		FriendshipRepository:  friendshipRepo,
 	}
 
-	collectionServiceConfig := service.COLSConfig{
+	collectionServiceConfig := service.CollectionServiceConfig{
 		CollectionRepo: collectionRepo,
 	}
 

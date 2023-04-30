@@ -7,7 +7,7 @@ import (
 )
 
 type COLSConfig struct {
-	collectionRepo model.CollectionRepoistory
+	CollectionRepo model.CollectionRepoistory
 }
 
 type collectionService struct {
@@ -25,6 +25,6 @@ func (service *collectionService) CreateEmptyCollection(ctx context.Context, col
 
 func NewCollectionService(config COLSConfig) model.CollectionService {
 	return &collectionService{
-		collectionRepo: config.collectionRepo,
+		collectionRepo: config.CollectionRepo,
 	}
 }

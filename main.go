@@ -45,6 +45,7 @@ func inject() (*gin.Engine, error) {
 	friendshipRepo := repository.NewFriendshipRepository(instance)
 	commentRepo := repository.NewCommentRepository(instance)
 	reactionRepo := repository.NewReactionRepository(instance)
+	collectionRepo := repository.NewCollectionRepository(instance)
 
 	// service configs
 	userProfileConfig := &service.UPSConfig{
@@ -71,6 +72,10 @@ func inject() (*gin.Engine, error) {
 		FriendshipRepository:  friendshipRepo,
 	}
 
+	collectionServiceConfig := service.COLSConfig{
+		CollectionRepo: collectionRepo,
+	}
+
 	// services
 	postService := service.NewPostService(postRepo)
 	userProfileService := service.NewUserProfileService(userProfileConfig)
@@ -78,6 +83,7 @@ func inject() (*gin.Engine, error) {
 	postCommentService := service.NewCommentService(commentConfig)
 	reactionService := service.NewReactionService(reactionConfig)
 	feedService := service.NewFeedService(feedServiceConfig)
+	collectionService := service.NewCollectionService(collectionServiceConfig)
 
 	// handler layer
 	router := gin.Default()

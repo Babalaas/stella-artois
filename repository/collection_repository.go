@@ -20,12 +20,12 @@ func (repo *collectionRepository) DeleteByID(ctx context.Context, id uuid.UUID) 
 	repo.DB.Where("id = ?", id).First(&collection)
 
 	if collection.ID == uuid.Nil {
-		log.Panic("Could not find collection with given ID")
+		log.Println("Could not find collection with given ID")
 	}
-	result := repo.DB.Where("id = ?", id).Delete(id)
+	result := repo.DB.Where("id = ?", id).Delete(&collection)
 
 	if result.Error != nil {
-		log.Panic("Could not delete collection.")
+		log.Println("Could not delete collection.")
 		return result.Error
 	}
 

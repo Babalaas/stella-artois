@@ -3,7 +3,6 @@ package service
 import (
 	"babalaas/stella-artois/model"
 	"context"
-	"log"
 
 	"github.com/google/uuid"
 )
@@ -26,9 +25,6 @@ func (service *collectionService) Delete(ctx context.Context, id uuid.UUID) erro
 // CreateEmptyCollection implements model.CollectionService
 func (service *collectionService) CreateEmptyCollection(ctx context.Context, collection model.Collection) error {
 	err := service.collectionRepo.Create(ctx, collection)
-	if err != nil {
-		log.Fatal("Can not create empty collection")
-	}
 	return err
 }
 

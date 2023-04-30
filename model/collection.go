@@ -28,3 +28,7 @@ func (collection *Collection) BeforeCreate(db *gorm.DB) error {
 	collection.ID = uuid.New()
 	return nil
 }
+
+func (Collection) TableName() string {
+	return "b_collection"
+}

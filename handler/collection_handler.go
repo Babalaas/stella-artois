@@ -42,5 +42,5 @@ func (handler *Handler) CreateEmptyCollection(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{})
+	c.JSON(http.StatusCreated, gin.H{"success": "created"})
 }

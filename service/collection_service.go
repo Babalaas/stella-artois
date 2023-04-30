@@ -4,6 +4,8 @@ import (
 	"babalaas/stella-artois/model"
 	"context"
 	"log"
+
+	"github.com/google/uuid"
 )
 
 // CollectionServiceConfig is the parameter object for creating a Collection Service
@@ -13,6 +15,11 @@ type CollectionServiceConfig struct {
 
 type collectionService struct {
 	collectionRepo model.CollectionRepository
+}
+
+// Delete implements model.CollectionService
+func (*collectionService) Delete(ctx context.Context, id uuid.UUID) error {
+	panic("unimplemented")
 }
 
 // CreateEmptyCollection implements model.CollectionService

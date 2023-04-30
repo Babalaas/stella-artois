@@ -19,11 +19,13 @@ type Collection struct {
 // CollectionRepository defines the database queries need to interact with collections
 type CollectionRepository interface {
 	Create(ctx context.Context, collection Collection) error
+	DeleteByID(ctx context.Context, id uuid.UUID) error
 }
 
 // CollectionService defines the use cases related to collections
 type CollectionService interface {
 	CreateEmptyCollection(ctx context.Context, collection Collection) error
+	Delete(ctx context.Context, id uuid.UUID) error
 }
 
 // BeforeCreate is a hook called to initialize collection fields to default values

@@ -4,11 +4,17 @@ import (
 	"babalaas/stella-artois/model"
 	"context"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type collectionRepository struct {
 	DB *gorm.DB
+}
+
+// DeleteByID implements model.CollectionRepository
+func (*collectionRepository) DeleteByID(ctx context.Context, id uuid.UUID) error {
+	panic("unimplemented")
 }
 
 // Create implements model.CollectionRepoistory

@@ -18,8 +18,9 @@ type collectionService struct {
 }
 
 // Delete implements model.CollectionService
-func (*collectionService) Delete(ctx context.Context, id uuid.UUID) error {
-	panic("unimplemented")
+func (service *collectionService) Delete(ctx context.Context, id uuid.UUID) error {
+	err := service.collectionRepo.DeleteByID(ctx, id)
+	return err
 }
 
 // CreateEmptyCollection implements model.CollectionService

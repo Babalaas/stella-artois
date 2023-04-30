@@ -3,6 +3,7 @@ package repository
 import (
 	"babalaas/stella-artois/model"
 	"context"
+	"log"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -13,8 +14,22 @@ type collectionRepository struct {
 }
 
 // DeleteByID implements model.CollectionRepository
-func (*collectionRepository) DeleteByID(ctx context.Context, id uuid.UUID) error {
-	panic("unimplemented")
+func (repo *collectionRepository) DeleteByID(ctx context.Context, id uuid.UUID) error {
+	var collection model.Collection
+
+	repo.DB.Where("id = ?", id).First(&collection)
+
+	if collection.ID == uuid.Nil {
+		log.Panic("Could not find collection with given ID")
+	}
+	result := repo.DB.Where("id = ?", id).Delete(id)
+
+	if result.Error != nil {
+		log.Panic("Could not delete collection.")
+		return result.Error
+	}
+
+	return nil
 }
 
 // Create implements model.CollectionRepoistory

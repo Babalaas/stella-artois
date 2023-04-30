@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Collection struct {
@@ -20,4 +21,10 @@ type CollectionRepoistory interface {
 
 type CollectionService interface {
 	CreateEmptyCollection(ctx context.Context, collection Collection) error
+}
+
+// BeforeCreate is a hook called to initialize user_profile fields to default values
+func (collection *Collection) BeforeCreate(db *gorm.DB) error {
+	collection.ID = uuid.New()
+	return nil
 }

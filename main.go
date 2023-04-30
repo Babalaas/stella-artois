@@ -103,6 +103,7 @@ func inject() (*gin.Engine, error) {
 		CommentService:     postCommentService,
 		ReactionService:    reactionService,
 		FeedService:        feedService,
+		CollectionService:  collectionService,
 	}
 
 	handler.NewHandler(handlerConfig)

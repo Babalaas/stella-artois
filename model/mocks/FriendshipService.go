@@ -56,6 +56,32 @@ func (_m *FriendshipService) GetAllFriends(ctx context.Context, userProfileID uu
 	return r0, r1
 }
 
+// GetFriendRequests provides a mock function with given fields: ctx, userProfileID
+func (_m *FriendshipService) GetFriendRequests(ctx context.Context, userProfileID uuid.UUID) ([]model.UserProfile, error) {
+	ret := _m.Called(ctx, userProfileID)
+
+	var r0 []model.UserProfile
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]model.UserProfile, error)); ok {
+		return rf(ctx, userProfileID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []model.UserProfile); ok {
+		r0 = rf(ctx, userProfileID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.UserProfile)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, userProfileID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // RemoveFriend provides a mock function with given fields: ctx, userProfileID, friendID
 func (_m *FriendshipService) RemoveFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error {
 	ret := _m.Called(ctx, userProfileID, friendID)

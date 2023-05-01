@@ -45,3 +45,22 @@ func (handler *Handler) CreateEmptyCollection(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"success": "created"})
 }
+
+// DeleteCollection is HTTP handler to delete one collection by id
+func (handler *Handler) DeleteCollection(c *gin.Context) {
+	reqID := c.Param("id")
+
+	uid := uuid.Must(uuid.Parse(reqID))
+	ctx := c.Request.Context()
+	err := handler.CollectionService.Delete(ctx, uid)
+
+	if err != nil {
+		log.Println("Could not delete")
+		c.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"deleted": "successfully deleted collection",
+	})
+}

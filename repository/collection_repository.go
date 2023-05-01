@@ -14,8 +14,13 @@ type collectionRepository struct {
 }
 
 // UpdateCollection implements model.CollectionRepository
-func (*collectionRepository) UpdateCollection(ctx context.Context, collection model.Collection) error {
-	panic("unimplemented")
+func (repo *collectionRepository) UpdateCollection(ctx context.Context, collection model.Collection) error {
+	err := repo.DB.Model(&collection).Where("id = ?", collection.ID).Updates(map[string]interface{}{
+		"name": collection.Name,
+		"day":  collection.Day,
+	}).Error
+
+	return err
 }
 
 // GetAllByUserProfileID implements model.CollectionRepository

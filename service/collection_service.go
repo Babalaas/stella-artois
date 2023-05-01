@@ -17,8 +17,9 @@ type collectionService struct {
 }
 
 // UpdateCollection implements model.CollectionService
-func (*collectionService) UpdateCollection(ctx context.Context, collection model.Collection) error {
-	panic("unimplemented")
+func (service *collectionService) UpdateCollection(ctx context.Context, collection model.Collection) error {
+	err := service.collectionRepo.UpdateCollection(ctx, collection)
+	return err
 }
 
 // GetUserCollections implements model.CollectionService

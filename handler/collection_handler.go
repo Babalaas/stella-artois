@@ -21,6 +21,13 @@ type getUserCollectionsRequest struct {
 	UserProfileID uuid.UUID `json:"user_profile_id" binding:"required"`
 }
 
+type updateCollectionRequest struct {
+	ID            uuid.UUID `json:"id"`
+	UserProfileID uuid.UUID `json:"user_profile_id"`
+	Day           time.Time `json:"day"`
+	Name          string    `json:"name"`
+}
+
 // CreateEmptyCollection is the HTTP handler for a user_profile to create an empty collection
 func (handler *Handler) CreateEmptyCollection(c *gin.Context) {
 	var req createEmptyRequest
@@ -90,4 +97,26 @@ func (handler *Handler) GetUserCollections(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"collections": collections})
+}
+
+func (handler *Handler) UpdateCollection(c *gin.Context) {
+	var req updateCollectionRequest
+
+	if bindErr := c.ShouldBindJSON(&req); bindErr != nil {
+		log.Printf("Failed to bind post comment JSON input: %v\n", bindErr)
+		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
+		return
+	}
+
+	err := handler.CollectionService.UpdateCollection(c, model.Collection(req))
+
+	if err != nil {
+		log.Printf("Could not get user's collections: %v\n", err)
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{})
 }

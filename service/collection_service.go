@@ -16,6 +16,12 @@ type collectionService struct {
 	collectionRepo model.CollectionRepository
 }
 
+// GetUserCollections implements model.CollectionService
+func (service *collectionService) GetUserCollections(ctx context.Context, userProfileID uuid.UUID) ([]model.Collection, error) {
+	collections, err := service.collectionRepo.GetAllByUserProfileID(ctx, userProfileID)
+	return collections, err
+}
+
 // Delete implements model.CollectionService
 func (service *collectionService) Delete(ctx context.Context, id uuid.UUID) error {
 	err := service.collectionRepo.DeleteByID(ctx, id)

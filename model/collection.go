@@ -20,12 +20,14 @@ type Collection struct {
 type CollectionRepository interface {
 	Create(ctx context.Context, collection Collection) error
 	DeleteByID(ctx context.Context, id uuid.UUID) error
+	GetAllByUserProfileID(ctx context.Context, userProfileID uuid.UUID) ([]Collection, error)
 }
 
 // CollectionService defines the use cases related to collections
 type CollectionService interface {
 	CreateEmptyCollection(ctx context.Context, collection Collection) error
 	Delete(ctx context.Context, id uuid.UUID) error
+	GetUserCollections(ctx context.Context, userProfileID uuid.UUID) ([]Collection, error)
 }
 
 // BeforeCreate is a hook called to initialize collection fields to default values

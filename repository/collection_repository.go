@@ -13,6 +13,16 @@ type collectionRepository struct {
 	DB *gorm.DB
 }
 
+// UpdateCollection implements model.CollectionRepository
+func (repo *collectionRepository) UpdateCollection(ctx context.Context, collection model.Collection) error {
+	err := repo.DB.Model(&collection).Where("id = ?", collection.ID).Updates(map[string]interface{}{
+		"name": collection.Name,
+		"day":  collection.Day,
+	}).Error
+
+	return err
+}
+
 // GetAllByUserProfileID implements model.CollectionRepository
 func (repo *collectionRepository) GetAllByUserProfileID(ctx context.Context, userProfileID uuid.UUID) ([]model.Collection, error) {
 	var collections []model.Collection

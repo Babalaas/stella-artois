@@ -25,7 +25,7 @@ type CollectionPost struct {
 
 // CollectionRepository defines the database queries need to interact with collections
 type CollectionRepository interface {
-	CreateCollectionPost(ctx context.Context, post Post, collectionID uuid.UUID) error
+	CreateCollectionPost(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error
 	Create(ctx context.Context, collection Collection) error
 	DeleteByID(ctx context.Context, id uuid.UUID) error
 	GetAllByUserProfileID(ctx context.Context, userProfileID uuid.UUID) ([]Collection, error)
@@ -34,7 +34,7 @@ type CollectionRepository interface {
 
 // CollectionService defines the use cases related to collections
 type CollectionService interface {
-	AddPostToCollection(ctx context.Context, post Post, collectionID uuid.UUID) error
+	AddPostToCollection(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error
 	CreateEmptyCollection(ctx context.Context, collection Collection) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	GetUserCollections(ctx context.Context, userProfileID uuid.UUID) ([]Collection, error)

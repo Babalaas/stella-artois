@@ -14,8 +14,13 @@ type collectionRepository struct {
 }
 
 // CreateCollectionPost implements model.CollectionRepository
-func (*collectionRepository) CreateCollectionPost(ctx context.Context, post model.Post, collectionID uuid.UUID) error {
-	panic("unimplemented")
+func (repo *collectionRepository) CreateCollectionPost(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error {
+	collectionPost := model.CollectionPost{
+		CollectionID: collectionID,
+		PostID:       postID,
+	}
+	err := repo.DB.Create(&collectionPost).Error
+	return err
 }
 
 // UpdateCollection implements model.CollectionRepository

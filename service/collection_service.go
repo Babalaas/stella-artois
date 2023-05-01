@@ -17,8 +17,9 @@ type collectionService struct {
 }
 
 // AddPostToCollection implements model.CollectionService
-func (*collectionService) AddPostToCollection(ctx context.Context, post model.Post, collectionID uuid.UUID) error {
-	panic("unimplemented")
+func (service *collectionService) AddPostToCollection(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error {
+	err := service.collectionRepo.CreateCollectionPost(ctx, postID, collectionID)
+	return err
 }
 
 // UpdateCollection implements model.CollectionService

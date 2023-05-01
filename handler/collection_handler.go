@@ -69,6 +69,7 @@ func (handler *Handler) DeleteCollection(c *gin.Context) {
 	})
 }
 
+// GetUserCollections is the HTTP handler for return all collections with the same user profile id
 func (handler *Handler) GetUserCollections(c *gin.Context) {
 	var req getUserCollectionsRequest
 

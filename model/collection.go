@@ -16,8 +16,16 @@ type Collection struct {
 	Name          string    `json:"name" gorm:"type:varchar(255);not null"`
 }
 
+// CollectionPost defines the struc t representing the associative table between b_collection and post
+type CollectionPost struct {
+	CollectionID uuid.UUID `json:"collection_id" gorm:"type:uuid;column:b_collection_id;not null"`
+	PostID       uuid.UUID `json:"post_id" gorm:"type:uuid;not null"`
+	DateAdded    time.Time `gorm:"type:timestamp without time zone;not null"`
+}
+
 // CollectionRepository defines the database queries need to interact with collections
 type CollectionRepository interface {
+	CreateCollectionPost(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error
 	Create(ctx context.Context, collection Collection) error
 	DeleteByID(ctx context.Context, id uuid.UUID) error
 	GetAllByUserProfileID(ctx context.Context, userProfileID uuid.UUID) ([]Collection, error)
@@ -26,6 +34,7 @@ type CollectionRepository interface {
 
 // CollectionService defines the use cases related to collections
 type CollectionService interface {
+	AddPostToCollection(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error
 	CreateEmptyCollection(ctx context.Context, collection Collection) error
 	Delete(ctx context.Context, id uuid.UUID) error
 	GetUserCollections(ctx context.Context, userProfileID uuid.UUID) ([]Collection, error)
@@ -35,6 +44,12 @@ type CollectionService interface {
 // BeforeCreate is a hook called to initialize collection fields to default values
 func (collection *Collection) BeforeCreate(db *gorm.DB) error {
 	collection.ID = uuid.New()
+	return nil
+}
+
+// BeforeCreate inits fields
+func (post *CollectionPost) BeforeCreate(db *gorm.DB) error {
+	post.DateAdded = time.Now().Local()
 	return nil
 }
 

@@ -188,26 +188,23 @@ VALUES
     '',
     0,
     false
-  );
-
-INSERT INTO
-  post (
-    id,
-    user_profile_id,
-    caption,
-    date_created,
-    image,
-    image_2,
-    reaction_count,
-    in_collection
-  )
-VALUES
+  ),
   (
     '93b4adb8-2b31-47cd-ae92-fd674eadf3b3',
     '12b02b58-7cad-11ed-a1eb-0242ac120002',
     'Walkoff wins are better with beer!',
     '2022-08-12 21:37:00-05',
     'https://babalaas-bucket.s3.amazonaws.com/seawolves.jpg',
+    '',
+    0,
+    false
+  ),
+  (
+    '9b28cfdc-e7cc-11ed-a05b-0242ac120003',
+    '4f9da08c-62eb-4dc0-9ab5-0d7183437695',
+    'My on a daily basis',
+    '2022-08-12 21:37:00-05',
+    'https://babalaas-bucket.s3.amazonaws.com/drunk-engineer.jpg',
     '',
     0,
     false

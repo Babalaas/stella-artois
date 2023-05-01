@@ -75,4 +75,5 @@ func NewHandler(config *Config) {
 	collectionRouteGroup.DELETE("/:id", handler.DeleteCollection)
 	collectionRouteGroup.GET("", handler.GetUserCollections)
 	collectionRouteGroup.PATCH("", handler.UpdateCollection)
+	collectionRouteGroup.POST("/posts", handler.AddPostToCollection)
 }

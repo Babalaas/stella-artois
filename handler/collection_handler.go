@@ -28,6 +28,11 @@ type updateCollectionRequest struct {
 	Name          string    `json:"name"`
 }
 
+type addPostToCollectionRequest struct {
+	CollectionID uuid.UUID `json:"collection_id"`
+	PostID       uuid.UUID `json:"post_id"`
+}
+
 // CreateEmptyCollection is the HTTP handler for a user_profile to create an empty collection
 func (handler *Handler) CreateEmptyCollection(c *gin.Context) {
 	var req createEmptyRequest
@@ -113,6 +118,29 @@ func (handler *Handler) UpdateCollection(c *gin.Context) {
 
 	if err != nil {
 		log.Printf("Could not get user's collections: %v\n", err)
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{})
+}
+
+// AddPostToCollection creates a collection post entity
+func (handler *Handler) AddPostToCollection(c *gin.Context) {
+	var req addPostToCollectionRequest
+
+	if bindErr := c.ShouldBindJSON(&req); bindErr != nil {
+		log.Printf("Failed to bind post comment JSON input: %v\n", bindErr)
+		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
+		return
+	}
+
+	err := handler.CollectionService.AddPostToCollection(c, req.PostID, req.CollectionID)
+
+	if err != nil {
+		log.Printf("Could not add post to collection: %v\n", err)
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": err,
 		})

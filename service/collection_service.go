@@ -16,6 +16,12 @@ type collectionService struct {
 	collectionRepo model.CollectionRepository
 }
 
+// AddPostToCollection implements model.CollectionService
+func (service *collectionService) AddPostToCollection(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error {
+	err := service.collectionRepo.CreateCollectionPost(ctx, postID, collectionID)
+	return err
+}
+
 // UpdateCollection implements model.CollectionService
 func (service *collectionService) UpdateCollection(ctx context.Context, collection model.Collection) error {
 	err := service.collectionRepo.UpdateCollection(ctx, collection)

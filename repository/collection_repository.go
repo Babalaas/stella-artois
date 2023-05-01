@@ -13,6 +13,29 @@ type collectionRepository struct {
 	DB *gorm.DB
 }
 
+// CreateCollectionPost implements model.CollectionRepository
+func (repo *collectionRepository) CreateCollectionPost(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error {
+	collectionPost := model.CollectionPost{
+		CollectionID: collectionID,
+		PostID:       postID,
+	}
+	err := repo.DB.Create(&collectionPost).Error
+	if err != nil {
+		log.Println("Could not create post collection")
+		return err
+	}
+	repo.markPostInCollection(postID)
+	if err != nil {
+		log.Println("Could not mark post in colleciton")
+	}
+	return err
+}
+
+func (repo *collectionRepository) markPostInCollection(postID uuid.UUID) error {
+	err := repo.DB.Model(&model.Post{}).Where("id = ?", postID).Update("in_collection", true).Error
+	return err
+}
+
 // UpdateCollection implements model.CollectionRepository
 func (repo *collectionRepository) UpdateCollection(ctx context.Context, collection model.Collection) error {
 	err := repo.DB.Model(&collection).Where("id = ?", collection.ID).Updates(map[string]interface{}{

@@ -99,6 +99,7 @@ func (handler *Handler) GetUserCollections(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"collections": collections})
 }
 
+// UpdateCollection updates the time and day of a collection
 func (handler *Handler) UpdateCollection(c *gin.Context) {
 	var req updateCollectionRequest
 

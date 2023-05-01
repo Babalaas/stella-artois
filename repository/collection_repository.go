@@ -20,6 +20,19 @@ func (repo *collectionRepository) CreateCollectionPost(ctx context.Context, post
 		PostID:       postID,
 	}
 	err := repo.DB.Create(&collectionPost).Error
+	if err != nil {
+		log.Println("Could not create post collection")
+		return err
+	}
+	repo.markPostInCollection(postID)
+	if err != nil {
+		log.Println("Could not mark post in colleciton")
+	}
+	return err
+}
+
+func (repo *collectionRepository) markPostInCollection(postID uuid.UUID) error {
+	err := repo.DB.Model(&model.Post{}).Where("id = ?", postID).Update("in_collection", true).Error
 	return err
 }
 

@@ -13,6 +13,11 @@ type collectionRepository struct {
 	DB *gorm.DB
 }
 
+// GetAllByUserProfileID implements model.CollectionRepository
+func (*collectionRepository) GetAllByUserProfileID(ctx context.Context, userProfileID uuid.UUID) ([]model.Collection, error) {
+	panic("unimplemented")
+}
+
 // DeleteByID implements model.CollectionRepository
 func (repo *collectionRepository) DeleteByID(ctx context.Context, id uuid.UUID) error {
 	var collection model.Collection

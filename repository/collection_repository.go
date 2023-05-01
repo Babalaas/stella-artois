@@ -14,8 +14,16 @@ type collectionRepository struct {
 }
 
 // GetAllByUserProfileID implements model.CollectionRepository
-func (*collectionRepository) GetAllByUserProfileID(ctx context.Context, userProfileID uuid.UUID) ([]model.Collection, error) {
-	panic("unimplemented")
+func (repo *collectionRepository) GetAllByUserProfileID(ctx context.Context, userProfileID uuid.UUID) ([]model.Collection, error) {
+	var collections []model.Collection
+
+	err := repo.DB.Where("user_profile_id = ?", userProfileID).Find(&collections).Error
+
+	if err != nil {
+		log.Println("Error finding collections belong to user")
+	}
+
+	return collections, err
 }
 
 // DeleteByID implements model.CollectionRepository

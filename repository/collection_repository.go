@@ -13,6 +13,11 @@ type collectionRepository struct {
 	DB *gorm.DB
 }
 
+// CreateCollectionPost implements model.CollectionRepository
+func (*collectionRepository) CreateCollectionPost(ctx context.Context, post model.Post, collectionID uuid.UUID) error {
+	panic("unimplemented")
+}
+
 // UpdateCollection implements model.CollectionRepository
 func (repo *collectionRepository) UpdateCollection(ctx context.Context, collection model.Collection) error {
 	err := repo.DB.Model(&collection).Where("id = ?", collection.ID).Updates(map[string]interface{}{

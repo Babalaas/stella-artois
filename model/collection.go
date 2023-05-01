@@ -47,6 +47,7 @@ func (collection *Collection) BeforeCreate(db *gorm.DB) error {
 	return nil
 }
 
+// BeforeCreate inits fields
 func (post *CollectionPost) BeforeCreate(db *gorm.DB) error {
 	post.DateAdded = time.Now().Local()
 	return nil

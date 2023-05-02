@@ -13,15 +13,7 @@ type postRepository struct {
 	DB *gorm.DB
 }
 
-func (repo *postRepository) Create(ctx context.Context, post *model.Post) (err error) {
-	panic("unimplemented")
-}
-
-func (repo *postRepository) Delete(ctx context.Context, uid uuid.UUID) (err error) {
-	panic("unimplemented")
-}
-
-func (repo *postRepository) GetAll(ctx context.Context) (posts []model.Post, err error) {
+func (repo *postRepository) Create(ctx context.Context, post *model.Post) error {
 	panic("unimplemented")
 }
 
@@ -32,10 +24,6 @@ func (repo *postRepository) GetByID(ctx context.Context, uid uuid.UUID) (post mo
 		return resPost, resErr
 	}
 	return resPost, nil
-}
-
-func (repo *postRepository) Update(ctx context.Context, post *model.Post) (err error) {
-	panic("unimplemented")
 }
 
 // NewPostRepository creates a new PostRepository with the server's database instance

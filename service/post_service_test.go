@@ -35,7 +35,12 @@ func TestFetchByUserID(t *testing.T) {
 
 		mockPostRepo.On("GetByID", mock.Anything, usedPostID).Return(mockPost, nil).Once()
 
-		service := service.NewPostService(mockPostRepo)
+		config := service.PostServiceConfig{
+			BucketURL:      "http://testing.com/",
+			PostRepository: mockPostRepo,
+		}
+
+		service := service.NewPostService(config)
 
 		returnedPost, err := service.GetByID(context.Background(), usedPostID)
 
@@ -49,7 +54,12 @@ func TestFetchByUserID(t *testing.T) {
 
 		mockPostRepo.On("GetByID", mock.Anything, notusedPostID).Return(emptyPost, errors.New("Post with id not found.")).Once()
 
-		service := service.NewPostService(mockPostRepo)
+		config := service.PostServiceConfig{
+			BucketURL:      "http://testing.com/",
+			PostRepository: mockPostRepo,
+		}
+
+		service := service.NewPostService(config)
 
 		returnedPost, err := service.GetByID(context.Background(), notusedPostID)
 

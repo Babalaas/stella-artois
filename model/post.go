@@ -25,15 +25,13 @@ type Post struct {
 type PostService interface {
 	GetByID(ctx context.Context, uid uuid.UUID) (post Post, err error)
 	AddToCollection(ctx context.Context, post *Post) (err error)
+	UploadPost(ctx context.Context, userProfileID uuid.UUID, caption string, image string) error
 }
 
 // PostRepository interface definition
 type PostRepository interface {
-	GetAll(ctx context.Context) (posts []Post, err error)
 	GetByID(ctx context.Context, uid uuid.UUID) (post Post, err error)
-	Create(ctx context.Context, post *Post) (err error)
-	Update(ctx context.Context, post *Post) (err error)
-	Delete(ctx context.Context, uid uuid.UUID) (err error)
+	Create(ctx context.Context, post Post) error
 }
 
 // BeforeCreate is a hook called to initialize post fields to default values

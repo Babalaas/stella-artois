@@ -17,57 +17,17 @@ type PostRepository struct {
 }
 
 // Create provides a mock function with given fields: ctx, post
-func (_m *PostRepository) Create(ctx context.Context, post *model.Post) error {
+func (_m *PostRepository) Create(ctx context.Context, post model.Post) error {
 	ret := _m.Called(ctx, post)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, *model.Post) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, model.Post) error); ok {
 		r0 = rf(ctx, post)
 	} else {
 		r0 = ret.Error(0)
 	}
 
 	return r0
-}
-
-// Delete provides a mock function with given fields: ctx, uid
-func (_m *PostRepository) Delete(ctx context.Context, uid uuid.UUID) error {
-	ret := _m.Called(ctx, uid)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) error); ok {
-		r0 = rf(ctx, uid)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
-// GetAll provides a mock function with given fields: ctx
-func (_m *PostRepository) GetAll(ctx context.Context) ([]model.Post, error) {
-	ret := _m.Called(ctx)
-
-	var r0 []model.Post
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context) ([]model.Post, error)); ok {
-		return rf(ctx)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context) []model.Post); ok {
-		r0 = rf(ctx)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]model.Post)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
-		r1 = rf(ctx)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
 }
 
 // GetByID provides a mock function with given fields: ctx, uid
@@ -92,20 +52,6 @@ func (_m *PostRepository) GetByID(ctx context.Context, uid uuid.UUID) (model.Pos
 	}
 
 	return r0, r1
-}
-
-// Update provides a mock function with given fields: ctx, post
-func (_m *PostRepository) Update(ctx context.Context, post *model.Post) error {
-	ret := _m.Called(ctx, post)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, *model.Post) error); ok {
-		r0 = rf(ctx, post)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
 }
 
 type mockConstructorTestingTNewPostRepository interface {

@@ -46,6 +46,7 @@ func NewHandler(config *Config) {
 
 	postRouteGroup := config.Router.Group("/posts")
 	postRouteGroup.GET("/:id", handler.GetPostByID)
+	postRouteGroup.POST("", handler.UploadPost)
 
 	userProfileRouteGroup := config.Router.Group("/user-profiles")
 	userProfileRouteGroup.POST("", handler.Register)

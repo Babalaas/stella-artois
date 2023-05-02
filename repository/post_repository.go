@@ -13,8 +13,9 @@ type postRepository struct {
 	DB *gorm.DB
 }
 
-func (repo *postRepository) Create(ctx context.Context, post *model.Post) error {
-	panic("unimplemented")
+func (repo *postRepository) Create(ctx context.Context, post model.Post) error {
+	err := repo.DB.Create(&post).Error
+	return err
 }
 
 func (repo *postRepository) GetByID(ctx context.Context, uid uuid.UUID) (post model.Post, err error) {

@@ -31,7 +31,7 @@ type PostService interface {
 // PostRepository interface definition
 type PostRepository interface {
 	GetByID(ctx context.Context, uid uuid.UUID) (post Post, err error)
-	Create(ctx context.Context, post *Post) error
+	Create(ctx context.Context, post Post) error
 }
 
 // BeforeCreate is a hook called to initialize post fields to default values

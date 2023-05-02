@@ -54,6 +54,20 @@ func (_m *PostService) GetByID(ctx context.Context, uid uuid.UUID) (model.Post, 
 	return r0, r1
 }
 
+// UploadPost provides a mock function with given fields: ctx, userProfileID, caption, image
+func (_m *PostService) UploadPost(ctx context.Context, userProfileID uuid.UUID, caption string, image string) error {
+	ret := _m.Called(ctx, userProfileID, caption, image)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, string, string) error); ok {
+		r0 = rf(ctx, userProfileID, caption, image)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 type mockConstructorTestingTNewPostService interface {
 	mock.TestingT
 	Cleanup(func())

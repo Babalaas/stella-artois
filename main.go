@@ -18,6 +18,7 @@ type envConfig struct {
 	Port             string
 	ConnectionString string
 	GinMode          string
+	BucketURL        string
 }
 
 func main() {
@@ -76,8 +77,13 @@ func inject() (*gin.Engine, error) {
 		CollectionRepo: collectionRepo,
 	}
 
+	postServiceConfig := service.PostServiceConfig{
+		BucketURL:      os.Getenv("BUCKET_URL"),
+		PostRepository: postRepo,
+	}
+
 	// services
-	postService := service.NewPostService(postRepo)
+	postService := service.NewPostService(postServiceConfig)
 	userProfileService := service.NewUserProfileService(userProfileConfig)
 	friendshipService := service.NewFriendshipService(friendshipConfig)
 	postCommentService := service.NewCommentService(commentConfig)
@@ -116,6 +122,7 @@ func initEnvConfig() *envConfig {
 		Port:             os.Getenv("PORT"),
 		ConnectionString: os.Getenv("CONNECTION_STRING"),
 		GinMode:          os.Getenv("GIN_MODE"),
+		BucketURL:        os.Getenv("BUCKET_URL"),
 	}
 	return &newEnv
 }

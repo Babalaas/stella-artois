@@ -12,6 +12,11 @@ type postService struct {
 	PostRepository model.PostRepository
 }
 
+type PostServiceConfig struct {
+	BucketURL      string
+	PostRepository model.PostRepository
+}
+
 // UploadPost implements model.PostService
 func (service *postService) UploadPost(ctx context.Context, userProfileID uuid.UUID, caption string, image string) error {
 	imageLink := service.bucketURL + image
@@ -37,8 +42,9 @@ func (service *postService) AddToCollection(ctx context.Context, post *model.Pos
 }
 
 // NewPostService creates a Post Service with a PostRepository attribute
-func NewPostService(postRepo model.PostRepository) model.PostService {
+func NewPostService(config PostServiceConfig) model.PostService {
 	return &postService{
-		PostRepository: postRepo,
+		bucketURL:      config.BucketURL,
+		PostRepository: config.PostRepository,
 	}
 }

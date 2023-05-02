@@ -12,6 +12,7 @@ type postService struct {
 	PostRepository model.PostRepository
 }
 
+// PostServiceConfig is the parameter object for creating Post Services
 type PostServiceConfig struct {
 	BucketURL      string
 	PostRepository model.PostRepository

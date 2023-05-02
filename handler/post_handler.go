@@ -34,6 +34,7 @@ func (handler *Handler) GetPostByID(c *gin.Context) {
 	})
 }
 
+// UploadPost handles HTTP request to create a new post
 func (handler *Handler) UploadPost(c *gin.Context) {
 	var req uploadPostRequest
 

@@ -8,12 +8,22 @@ import (
 )
 
 type postService struct {
+	bucketURL      string
 	PostRepository model.PostRepository
 }
 
 // UploadPost implements model.PostService
-func (*postService) UploadPost(ctx context.Context, userProfileID uuid.UUID, caption string, image string) error {
-	panic("unimplemented")
+func (service *postService) UploadPost(ctx context.Context, userProfileID uuid.UUID, caption string, image string) error {
+	imageLink := service.bucketURL + image
+
+	post := model.Post{
+		UserProfileID: userProfileID,
+		Caption:       caption,
+		Image:         imageLink,
+	}
+
+	err := service.PostRepository.Create(ctx, post)
+	return err
 }
 
 // Get implements models.PostService

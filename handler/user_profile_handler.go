@@ -146,6 +146,7 @@ func (handler *Handler) GetUserProfileByID(c *gin.Context) {
 		"first_name":   userProfile.FirstName,
 		"last_name":    userProfile.LastName,
 		"email":        userProfile.Email,
+		"phone":        userProfile.Phone,
 		"birthdate":    userProfile.Birthdate,
 		"password":     "",
 		"profile_pic":  userProfile.ProfilePic,

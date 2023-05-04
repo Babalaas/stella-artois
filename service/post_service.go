@@ -12,6 +12,12 @@ type postService struct {
 	PostRepository model.PostRepository
 }
 
+// GetAllByUserProfile implements model.PostService
+func (service *postService) GetAllByUserProfile(ctx context.Context, userProfileID uuid.UUID) ([]model.Post, error) {
+	posts, err := service.PostRepository.GetAllByUserProfile(ctx, userProfileID)
+	return posts, err
+}
+
 // PostServiceConfig is the parameter object for creating Post Services
 type PostServiceConfig struct {
 	BucketURL      string

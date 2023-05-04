@@ -72,6 +72,7 @@ func NewHandler(config *Config) {
 
 	feedRouteGroup := config.Router.Group("/feed")
 	feedRouteGroup.GET("/:id", handler.GenerateFeed)
+	feedRouteGroup.GET("/collectons/:id", handler.GetPostsInCollection)
 
 	collectionRouteGroup := config.Router.Group("/collections")
 	collectionRouteGroup.POST("", handler.CreateEmptyCollection)

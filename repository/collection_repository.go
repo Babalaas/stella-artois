@@ -13,6 +13,17 @@ type collectionRepository struct {
 	DB *gorm.DB
 }
 
+// GetPostsInCollection implements model.CollectionRepository
+func (repo *collectionRepository) GetPostsInCollection(ctx context.Context, collectionID uuid.UUID) ([]model.Post, error) {
+	var posts []model.Post
+	err := repo.DB.Table("public.collection_post").
+		Select("public.post.*").
+		Joins("JOIN public.post ON collection_post.post_id = post.id").
+		Where("collection_post.b_collection_id = ?", collectionID).
+		Find(&posts).Error
+	return posts, err
+}
+
 // CreateCollectionPost implements model.CollectionRepository
 func (repo *collectionRepository) CreateCollectionPost(ctx context.Context, postID uuid.UUID, collectionID uuid.UUID) error {
 	collectionPost := model.CollectionPost{

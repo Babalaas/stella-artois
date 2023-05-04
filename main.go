@@ -71,6 +71,7 @@ func inject() (*gin.Engine, error) {
 		CommentRepository:     commentRepo,
 		ReactionRepository:    reactionRepo,
 		FriendshipRepository:  friendshipRepo,
+		CollectionRepository:  collectionRepo,
 	}
 
 	collectionServiceConfig := service.CollectionServiceConfig{

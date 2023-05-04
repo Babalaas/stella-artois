@@ -17,10 +17,6 @@ type createEmptyRequest struct {
 	Name          string    `json:"name" binding:"required"`
 }
 
-type getUserCollectionsRequest struct {
-	UserProfileID uuid.UUID `json:"user_profile_id" binding:"required"`
-}
-
 type updateCollectionRequest struct {
 	ID            uuid.UUID `json:"id"`
 	UserProfileID uuid.UUID `json:"user_profile_id"`
@@ -83,15 +79,11 @@ func (handler *Handler) DeleteCollection(c *gin.Context) {
 
 // GetUserCollections is the HTTP handler for return all collections with the same user profile id
 func (handler *Handler) GetUserCollections(c *gin.Context) {
-	var req getUserCollectionsRequest
+	reqID := c.Query("user_profile_id")
+	uid := uuid.Must(uuid.Parse(reqID))
+	ctx := c.Request.Context()
 
-	if bindErr := c.ShouldBindJSON(&req); bindErr != nil {
-		log.Panicf("Failed to bind post comment JSON input: %v\n", bindErr)
-		c.JSON(http.StatusBadRequest, gin.H{"errors": fmt.Sprintf("%v", bindErr)})
-		return
-	}
-
-	collections, err := handler.CollectionService.GetUserCollections(c, req.UserProfileID)
+	collections, err := handler.CollectionService.GetUserCollections(ctx, uid)
 
 	if err != nil {
 		log.Printf("Could not get user's collections: %v\n", err)

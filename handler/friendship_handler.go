@@ -99,3 +99,24 @@ func (handler *Handler) RemoveFriend(c *gin.Context) {
 		"frienship": "removed",
 	})
 }
+
+// SearchNonFriends returns a list of users wiith displayanmes that contain the query text and are not the passed user or friends
+func (handler *Handler) SearchNonFriends(c *gin.Context) {
+	query := c.Query("q")
+	reqID := c.Query("id")
+	uid := uuid.Must(uuid.Parse(reqID))
+	ctx := c.Request.Context()
+	userProfiles, err := handler.FriendshipService.SearchNonFriends(ctx, uid, query)
+
+	if err != nil {
+		log.Printf("Failed to seach for user profiles: %v\n", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"results": userProfiles,
+	})
+}

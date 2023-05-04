@@ -14,6 +14,27 @@ type friendshipRepository struct {
 	DB *gorm.DB
 }
 
+// SearchNonFriends implements model.FriendshipRepository
+func (repo *friendshipRepository) SearchNonFriends(ctx context.Context, userProfileID uuid.UUID, query string) ([]model.UserProfile, error) {
+	var userProfiles []model.UserProfile
+	query = "%" + query + "%"
+
+	sqlQuery := `SELECT u.*
+	FROM "public".user_profile u
+	WHERE u.id != ?
+	  AND u.display_name LIKE ?
+	  AND NOT EXISTS (
+		SELECT 1
+		FROM "public".friendship f
+		WHERE (f.request_user_profile_id = u.id AND f.response_user_profile_id = ?)
+		OR (f.request_user_profile_id = ? AND f.response_user_profile_id = u.id)
+	  );`
+
+	err := repo.DB.Raw(sqlQuery, userProfileID, query, userProfileID, userProfileID).Scan(&userProfiles).Error
+
+	return userProfiles, err
+}
+
 // FindFriendship implements model.FriendshipRepository
 func (repo *friendshipRepository) FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (model.Friendship, error) {
 	var friendship model.Friendship

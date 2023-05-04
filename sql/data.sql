@@ -154,6 +154,17 @@ VALUES
     '2001-03-28',
     'password',
     'https://library.sportingnews.com/styles/crop_style_16_9_mobile_2x/s3/2023-03/GettyImages-1471642056.jpg?itok=Mcrb_5re'
+  ),
+  (
+    '7410fe8b-6906-4aa0-b4d0-9a8824fa6e70',
+    'FBIMostWanted',
+    'Raymond',
+    'Reddington',
+    'raymond@gmail.com',
+    '7778675309',
+    '1970-01-06',
+    'password',
+    'https://qph.cf2.quoracdn.net/main-qimg-35658240675b5e2b422797ef84d258f8-lq'
   );
 
   INSERT INTO

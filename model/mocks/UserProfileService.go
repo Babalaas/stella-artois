@@ -16,6 +16,30 @@ type UserProfileService struct {
 	mock.Mock
 }
 
+// GetByID provides a mock function with given fields: ctx, id
+func (_m *UserProfileService) GetByID(ctx context.Context, id uuid.UUID) (model.UserProfile, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 model.UserProfile
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) (model.UserProfile, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) model.UserProfile); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(model.UserProfile)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetDisplayName provides a mock function with given fields: ctx, userProfileID
 func (_m *UserProfileService) GetDisplayName(ctx context.Context, userProfileID uuid.UUID) (string, error) {
 	ret := _m.Called(ctx, userProfileID)

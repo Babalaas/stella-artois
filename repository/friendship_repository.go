@@ -18,7 +18,7 @@ func (repo *friendshipRepository) SearchNonFriends(ctx context.Context, userProf
 	var userProfiles []model.UserProfile
 	query = "%" + query + "%"
 
-	sqlQuery := `SELECT u.*
+	sqlQuery := `SELECT u.id, u.display_name, u.first_name, u.last_name, u.email, u.phone, u.birthdate, u.profile_pic
 	FROM "public".user_profile u
 	WHERE u.id != ?
 	  AND u.display_name LIKE ?
@@ -150,7 +150,7 @@ func (repo *friendshipRepository) GetAllFriends(ctx context.Context, userProfile
 	err := repo.DB.Table("user_profile").
 		Select("user_profile.id, user_profile.display_name, user_profile.first_name, user_profile.last_name, user_profile.email, user_profile.phone, user_profile.birthdate, user_profile.profile_pic, friendship.status, friendship.date_updated").
 		Joins("INNER JOIN friendship ON user_profile.id = friendship.request_user_profile_id OR user_profile.id = friendship.response_user_profile_id").
-		Where("(friendship.request_user_profile_id = ? OR friendship.response_user_profile_id = ?) AND friendship.status = ?", userProfileID, userProfileID, "accepted").
+		Where("((friendship.request_user_profile_id = ? OR friendship.response_user_profile_id = ?) AND friendship.status = ?) AND user_profile.id != ?", userProfileID, userProfileID, "accepted", userProfileID).
 		Find(&friends).Error
 
 	if err != nil {

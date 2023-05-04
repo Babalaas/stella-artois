@@ -165,6 +165,17 @@ VALUES
     '1998-08-07',
     'password',
     'https://static.clubs.nfl.com/image/private/t_editorial_landscape_mobile/f_auto/v1628455300/eagles/zuftq3b6azlzvkoznb2v.jpg'
+  ),
+  (
+    '7410fe8b-6906-4aa0-b4d0-9a8824fa6e70',
+    'FBIMostWanted',
+    'Raymond',
+    'Reddington',
+    'raymond@gmail.com',
+    '7778675309',
+    '1970-01-06',
+    'password',
+    'https://qph.cf2.quoracdn.net/main-qimg-35658240675b5e2b422797ef84d258f8-lq'
   );
 
   INSERT INTO

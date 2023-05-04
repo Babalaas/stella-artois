@@ -84,6 +84,32 @@ func (_m *CollectionRepository) GetAllByUserProfileID(ctx context.Context, userP
 	return r0, r1
 }
 
+// GetPostsInCollection provides a mock function with given fields: ctx, collectionID
+func (_m *CollectionRepository) GetPostsInCollection(ctx context.Context, collectionID uuid.UUID) ([]model.Post, error) {
+	ret := _m.Called(ctx, collectionID)
+
+	var r0 []model.Post
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]model.Post, error)); ok {
+		return rf(ctx, collectionID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []model.Post); ok {
+		r0 = rf(ctx, collectionID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.Post)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, collectionID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // UpdateCollection provides a mock function with given fields: ctx, collection
 func (_m *CollectionRepository) UpdateCollection(ctx context.Context, collection model.Collection) error {
 	ret := _m.Called(ctx, collection)

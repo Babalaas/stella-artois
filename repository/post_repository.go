@@ -13,6 +13,11 @@ type postRepository struct {
 	DB *gorm.DB
 }
 
+// GetAllByUserProfile implements model.PostRepository
+func (*postRepository) GetAllByUserProfile(ctx context.Context, userProfileID uuid.UUID) ([]model.Post, error) {
+	panic("unimplemented")
+}
+
 func (repo *postRepository) Create(ctx context.Context, post model.Post) error {
 	err := repo.DB.Create(&post).Error
 	return err

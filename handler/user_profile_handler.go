@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type registerRequest struct {
@@ -122,5 +123,24 @@ func (handler *Handler) Search(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"results": userProfiles,
+	})
+}
+
+// GetUserProfileByID cleans the id parameter and calls the PostService to get a post by based on the parameter (GET /{id})
+func (handler *Handler) GetUserProfileByID(c *gin.Context) {
+	reqID := c.Param("id")
+
+	uid := uuid.Must(uuid.Parse(reqID))
+	ctx := c.Request.Context()
+	userProfile, err := handler.UserProfileService.GetByID(ctx, uid)
+
+	if err != nil {
+		log.Println("Unable to find post")
+		c.JSON(http.StatusNotFound, gin.H{"error": "Post record not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": userProfile,
 	})
 }

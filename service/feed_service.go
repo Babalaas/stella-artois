@@ -200,5 +200,6 @@ func NewFeedService(config FeedServiceConfig) FeedService {
 		commentRepository:     config.CommentRepository,
 		reactionRepository:    config.ReactionRepository,
 		friendshipRepository:  config.FriendshipRepository,
+		collectionRepository:  config.CollectionRepository,
 	}
 }

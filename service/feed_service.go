@@ -40,6 +40,7 @@ type topComment struct {
 type FeedService interface {
 	GenerateFeed(ctx context.Context, userProfileID uuid.UUID) ([]FeedPost, error)
 	GenerateCollectionFeed(ctx context.Context, collectionID uuid.UUID) ([]FeedPost, error)
+	GenerateUserPostsFeed(ctx context.Context, collectionID uuid.UUID) ([]FeedPost, error)
 }
 
 type feedService struct {
@@ -140,6 +141,27 @@ func (service *feedService) GenerateCollectionFeed(ctx context.Context, collecti
 		feedPost, err := service.generateFeedPost(ctx, post)
 		if err != nil {
 			log.Println("Could not get posts in collection")
+			return feedPosts, err
+		}
+		feedPosts = append(feedPosts, feedPost)
+	}
+
+	return feedPosts, err
+}
+
+// GenerateUserPostsFeed implements FeedService
+func (service *feedService) GenerateUserPostsFeed(ctx context.Context, userProfileID uuid.UUID) ([]FeedPost, error) {
+	var feedPosts []FeedPost
+	posts, err := service.postRepository.GetAllByUserProfile(ctx, userProfileID)
+	if err != nil {
+		log.Println("Could not get posts by user")
+		return feedPosts, err
+	}
+
+	for _, post := range posts {
+		feedPost, err := service.generateFeedPost(ctx, post)
+		if err != nil {
+			log.Println("Could not get posts by user")
 			return feedPosts, err
 		}
 		feedPosts = append(feedPosts, feedPost)

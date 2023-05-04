@@ -44,6 +44,7 @@ type CollectionService interface {
 // BeforeCreate is a hook called to initialize collection fields to default values
 func (collection *Collection) BeforeCreate(db *gorm.DB) error {
 	collection.ID = uuid.New()
+	collection.Day = time.Now().Local()
 	return nil
 }
 

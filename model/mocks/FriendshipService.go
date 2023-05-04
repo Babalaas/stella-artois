@@ -31,19 +31,19 @@ func (_m *FriendshipService) AcceptFriend(ctx context.Context, userProfileID uui
 }
 
 // GetAllFriends provides a mock function with given fields: ctx, userProfileID
-func (_m *FriendshipService) GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]model.Friend, error) {
+func (_m *FriendshipService) GetAllFriends(ctx context.Context, userProfileID uuid.UUID) ([]model.UserProfile, error) {
 	ret := _m.Called(ctx, userProfileID)
 
-	var r0 []model.Friend
+	var r0 []model.UserProfile
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]model.Friend, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]model.UserProfile, error)); ok {
 		return rf(ctx, userProfileID)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []model.Friend); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []model.UserProfile); ok {
 		r0 = rf(ctx, userProfileID)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]model.Friend)
+			r0 = ret.Get(0).([]model.UserProfile)
 		}
 	}
 
@@ -108,6 +108,32 @@ func (_m *FriendshipService) RequestFriend(ctx context.Context, userProfileID uu
 	}
 
 	return r0
+}
+
+// SearchNonFriends provides a mock function with given fields: ctx, userProfileID, query
+func (_m *FriendshipService) SearchNonFriends(ctx context.Context, userProfileID uuid.UUID, query string) ([]model.UserProfile, error) {
+	ret := _m.Called(ctx, userProfileID, query)
+
+	var r0 []model.UserProfile
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, string) ([]model.UserProfile, error)); ok {
+		return rf(ctx, userProfileID, query)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, string) []model.UserProfile); ok {
+		r0 = rf(ctx, userProfileID, query)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.UserProfile)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, string) error); ok {
+		r1 = rf(ctx, userProfileID, query)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 type mockConstructorTestingTNewFriendshipService interface {

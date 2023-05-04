@@ -28,7 +28,7 @@ func (handler *Handler) GenerateFeed(c *gin.Context) {
 	})
 }
 
-// GenerateFeed returns posts to populate a users feed by id
+// GetPostsInCollection returns posts in a collection with a feed structure
 func (handler *Handler) GetPostsInCollection(c *gin.Context) {
 	reqID := c.Param("id")
 

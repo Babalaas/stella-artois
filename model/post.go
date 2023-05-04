@@ -15,7 +15,7 @@ type Post struct {
 	CollectionID  uuid.UUID `gorm:"type:uuid"`
 	Caption       string    `gorm:"type:varchar(255);not null"`
 	DateCreated   time.Time `gorm:"type:timestamp without time zone;not null"`
-	Image         string    `gorm:"type:varchar(255);not null"`
+	Image         string    `gorm:"type:text;not null"`
 	Image2        string    `gorm:"type:varchar(255)"`
 	ReactionCount int       `gorm:"type:int4;not null"`
 	InCollection  bool      `gorm:"type:boolean; not null"`

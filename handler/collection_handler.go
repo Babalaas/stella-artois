@@ -13,7 +13,6 @@ import (
 
 type createEmptyRequest struct {
 	UserProfileID uuid.UUID `json:"user_profile_id" binding:"required"`
-	Day           time.Time `json:"day" binding:"required"`
 	Name          string    `json:"name" binding:"required"`
 }
 
@@ -41,7 +40,6 @@ func (handler *Handler) CreateEmptyCollection(c *gin.Context) {
 
 	collection := &model.Collection{
 		UserProfileID: req.UserProfileID,
-		Day:           req.Day,
 		Name:          req.Name,
 	}
 

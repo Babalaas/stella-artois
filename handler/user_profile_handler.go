@@ -141,6 +141,13 @@ func (handler *Handler) GetUserProfileByID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": userProfile,
+		"id":           userProfile.ID,
+		"display_name": userProfile.DisplayName,
+		"first_name":   userProfile.FirstName,
+		"last_name":    userProfile.LastName,
+		"email":        userProfile.Email,
+		"birthdate":    userProfile.Birthdate,
+		"password":     "",
+		"profile_pic":  userProfile.ProfilePic,
 	})
 }

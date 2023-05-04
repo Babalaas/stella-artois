@@ -39,6 +39,7 @@ type topComment struct {
 // FeedService generates the feed for a user
 type FeedService interface {
 	GenerateFeed(ctx context.Context, userProfileID uuid.UUID) ([]FeedPost, error)
+	GenerateCollectionFeed(ctx context.Context, collectionID uuid.UUID) ([]FeedPost, error)
 }
 
 type feedService struct {
@@ -47,6 +48,7 @@ type feedService struct {
 	commentRepository     model.CommentRepository
 	reactionRepository    model.ReactionRepository
 	friendshipRepository  model.FriendshipRepository
+	collectionRepository  model.CollectionRepository
 }
 
 // FeedServiceConfig acts a paramter object for creating new FeedServices
@@ -56,6 +58,7 @@ type FeedServiceConfig struct {
 	CommentRepository     model.CommentRepository
 	ReactionRepository    model.ReactionRepository
 	FriendshipRepository  model.FriendshipRepository
+	CollectionRepository  model.CollectionRepository
 }
 
 // GenerateFeed implements FeedService
@@ -122,6 +125,71 @@ func (service *feedService) GenerateFeed(ctx context.Context, userProfileID uuid
 	}
 
 	return feedPosts, err
+}
+
+// GenerateCollectionFeed implements FeedService
+func (service *feedService) GenerateCollectionFeed(ctx context.Context, collectionID uuid.UUID) ([]FeedPost, error) {
+	var feedPosts []FeedPost
+	posts, err := service.collectionRepository.GetPostsInCollection(ctx, collectionID)
+	if err != nil {
+		log.Println("Could not get posts in collection")
+		return feedPosts, err
+	}
+
+	for _, post := range posts {
+		feedPost, err := service.generateFeedPost(ctx, post)
+		if err != nil {
+			log.Println("Could not get posts in collection")
+			return feedPosts, err
+		}
+		feedPosts = append(feedPosts, feedPost)
+	}
+
+	return feedPosts, err
+}
+
+func (service *feedService) generateFeedPost(ctx context.Context, postObj model.Post) (FeedPost, error) {
+	userProfile, err := service.userProfileRepository.FindByID(ctx, postObj.UserProfileID)
+
+	if err != nil {
+		log.Fatal("OOF")
+	}
+
+	comments, err := service.commentRepository.GetRecent(ctx, postObj.ID, 2)
+
+	if err != nil {
+		log.Fatal("OOF")
+	}
+
+	var topComments []topComment
+	for _, comment := range comments {
+		commentAuthor, _ := service.userProfileRepository.FindByID(ctx, comment.UserProfileID)
+		newTopComment := topComment{
+			ID:            comment.ID,
+			UserProfileID: comment.UserProfileID,
+			DisplayName:   commentAuthor.DisplayName,
+			Content:       comment.Content,
+		}
+		topComments = append(topComments, newTopComment)
+	}
+
+	feedPost := FeedPost{
+		Author: author{
+			UserProfileID: userProfile.ID,
+			DisplayName:   userProfile.DisplayName,
+			ProfilePic:    userProfile.ProfilePic,
+		},
+		Post: post{
+			ID:            postObj.ID,
+			Image:         postObj.Image,
+			Image2:        postObj.Image2,
+			Caption:       postObj.Caption,
+			ReactionCount: postObj.ReactionCount,
+		},
+		TopComments: topComments,
+	}
+
+	return feedPost, err
 }
 
 // NewFeedService is the facory function for creating a FeedService

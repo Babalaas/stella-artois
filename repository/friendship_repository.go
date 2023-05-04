@@ -153,12 +153,7 @@ func (repo *friendshipRepository) GetAllFriends(ctx context.Context, userProfile
 		Where("((friendship.request_user_profile_id = ? OR friendship.response_user_profile_id = ?) AND friendship.status = ?) AND user_profile.id != ?", userProfileID, userProfileID, "accepted", userProfileID).
 		Find(&friends).Error
 
-	if err != nil {
-		log.Panic("Could not create a ust of friends")
-		return nil, err
-	}
-
-	return friends, nil
+	return friends, err
 }
 
 // NewFriendshipRepository creates a new FriendshipRepository with the server's database instance

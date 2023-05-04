@@ -48,7 +48,7 @@ func (handler *Handler) GetPostsInCollection(c *gin.Context) {
 	})
 }
 
-// GetPostsInCollection returns posts in a collection with a feed structure
+// GetPostsByUserID returns posts in a collection with a feed structure
 func (handler *Handler) GetPostsByUserID(c *gin.Context) {
 	reqID := c.Param("id")
 

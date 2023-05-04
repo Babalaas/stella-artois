@@ -18,7 +18,7 @@ func (repo *friendshipRepository) SearchNonFriends(ctx context.Context, userProf
 	var userProfiles []model.UserProfile
 	query = "%" + query + "%"
 
-	sqlQuery := `SELECT u.*
+	sqlQuery := `SELECT u.id, u.display_name, u.first_name, u.last_name, u.email, u.phone, u.birthdate, u.profile_pic
 	FROM "public".user_profile u
 	WHERE u.id != ?
 	  AND u.display_name LIKE ?

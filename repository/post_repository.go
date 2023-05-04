@@ -14,8 +14,10 @@ type postRepository struct {
 }
 
 // GetAllByUserProfile implements model.PostRepository
-func (*postRepository) GetAllByUserProfile(ctx context.Context, userProfileID uuid.UUID) ([]model.Post, error) {
-	panic("unimplemented")
+func (repo *postRepository) GetAllByUserProfile(ctx context.Context, userProfileID uuid.UUID) ([]model.Post, error) {
+	var posts []model.Post
+	err := repo.DB.Where("user_profile_id = ?", userProfileID).Find(&posts).Error
+	return posts, err
 }
 
 func (repo *postRepository) Create(ctx context.Context, post model.Post) error {

@@ -13,8 +13,9 @@ type postService struct {
 }
 
 // GetAllByUserProfile implements model.PostService
-func (*postService) GetAllByUserProfile(ctx context.Context, userProfileID uuid.UUID) ([]model.Post, error) {
-	panic("unimplemented")
+func (service *postService) GetAllByUserProfile(ctx context.Context, userProfileID uuid.UUID) ([]model.Post, error) {
+	posts, err := service.PostRepository.GetAllByUserProfile(ctx, userProfileID)
+	return posts, err
 }
 
 // PostServiceConfig is the parameter object for creating Post Services

@@ -13,6 +13,12 @@ type UserProfileService struct {
 	UserProfileRepository model.UserProfileRepository
 }
 
+// GetByID implements model.UserProfileService
+func (service *UserProfileService) GetByID(ctx context.Context, id uuid.UUID) (model.UserProfile, error) {
+	resUserProfile, resErr := service.UserProfileRepository.FindByID(ctx, id)
+	return resUserProfile, resErr
+}
+
 // Search implements model.UserProfileService
 func (service *UserProfileService) Search(ctx context.Context, displayName string) ([]model.UserProfile, error) {
 	userProfiles, err := service.UserProfileRepository.SearchyByDisplayName(ctx, displayName)

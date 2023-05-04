@@ -27,6 +27,7 @@ type UserProfileService interface {
 	LogIn(ctx context.Context, userProfile *UserProfile) (UserProfile, error)
 	GetDisplayName(ctx context.Context, userProfileID uuid.UUID) (string, error)
 	Search(ctx context.Context, displayName string) ([]UserProfile, error)
+	GetByID(ctx context.Context, id uuid.UUID) (UserProfile, error)
 }
 
 // UserProfileRepository definition

@@ -43,6 +43,7 @@ type FriendshipRepository interface {
 	RemoveFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
 	FindFriendship(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) (Friendship, error)
 	GetPendingFriendships(ctx context.Context, userProfileID uuid.UUID) ([]UserProfile, error)
+	SearchNonFriends(ctx context.Context, userProfileID uuid.UUID, query string) ([]UserProfile, error)
 }
 
 // FriendshipService defines the usecases involving friendships
@@ -52,4 +53,5 @@ type FriendshipService interface {
 	AcceptFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
 	RemoveFriend(ctx context.Context, userProfileID uuid.UUID, friendID uuid.UUID) error
 	GetFriendRequests(ctx context.Context, userProfileID uuid.UUID) ([]UserProfile, error)
+	SearchNonFriends(ctx context.Context, userProfileID uuid.UUID, query string) ([]Friend, error)
 }

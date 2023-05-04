@@ -12,6 +12,11 @@ type friendshipService struct {
 	friendshipRepo model.FriendshipRepository
 }
 
+// SearchNonFriends implements model.FriendshipService
+func (*friendshipService) SearchNonFriends(ctx context.Context, userProfileID uuid.UUID, query string) ([]model.Friend, error) {
+	panic("unimplemented")
+}
+
 // GetFriendRequests implements model.FriendshipService
 func (service *friendshipService) GetFriendRequests(ctx context.Context, userProfileID uuid.UUID) ([]model.UserProfile, error) {
 	friendships, err := service.friendshipRepo.GetPendingFriendships(ctx, userProfileID)

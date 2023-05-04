@@ -13,8 +13,24 @@ type friendshipService struct {
 }
 
 // SearchNonFriends implements model.FriendshipService
-func (*friendshipService) SearchNonFriends(ctx context.Context, userProfileID uuid.UUID, query string) ([]model.Friend, error) {
-	panic("unimplemented")
+func (service *friendshipService) SearchNonFriends(ctx context.Context, userProfileID uuid.UUID, query string) ([]model.Friend, error) {
+	friends, err := service.friendshipRepo.SearchNonFriends(ctx, userProfileID, query)
+
+	var trimmedFriends []model.Friend
+
+	for _, friend := range friends {
+		trimmedFriend := model.Friend{
+			ID:          friend.ID,
+			DisplayName: friend.DisplayName,
+			FirstName:   friend.FirstName,
+			LastName:    friend.LastName,
+			Email:       friend.Email,
+			Phone:       friend.Phone,
+			ProfilePic:  friend.ProfilePic}
+		trimmedFriends = append(trimmedFriends, trimmedFriend)
+	}
+
+	return trimmedFriends, err
 }
 
 // GetFriendRequests implements model.FriendshipService

@@ -30,6 +30,7 @@ type CollectionRepository interface {
 	DeleteByID(ctx context.Context, id uuid.UUID) error
 	GetAllByUserProfileID(ctx context.Context, userProfileID uuid.UUID) ([]Collection, error)
 	UpdateCollection(ctx context.Context, collection Collection) error
+	GetPostsInCollection(ctx context.Context, collectionID uuid.UUID) ([]Post, error)
 }
 
 // CollectionService defines the use cases related to collections
@@ -39,6 +40,7 @@ type CollectionService interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 	GetUserCollections(ctx context.Context, userProfileID uuid.UUID) ([]Collection, error)
 	UpdateCollection(ctx context.Context, collection Collection) error
+	GetPostsInCollection(ctx context.Context, collectionID uuid.UUID) ([]Post, error)
 }
 
 // BeforeCreate is a hook called to initialize collection fields to default values

@@ -45,6 +45,7 @@ func NewHandler(config *Config) {
 	}
 
 	postRouteGroup := config.Router.Group("/posts")
+	postRouteGroup.GET("", handler.GetPostsByUser)
 	postRouteGroup.GET("/:id", handler.GetPostByID)
 	postRouteGroup.POST("", handler.UploadPost)
 
@@ -73,6 +74,7 @@ func NewHandler(config *Config) {
 	feedRouteGroup := config.Router.Group("/feed")
 	feedRouteGroup.GET("/:id", handler.GenerateFeed)
 	feedRouteGroup.GET("/collectons/:id", handler.GetPostsInCollection)
+	feedRouteGroup.GET("/posts/:id", handler.GetPostsByUserID)
 
 	collectionRouteGroup := config.Router.Group("/collections")
 	collectionRouteGroup.POST("", handler.CreateEmptyCollection)

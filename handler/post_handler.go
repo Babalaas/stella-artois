@@ -54,3 +54,22 @@ func (handler *Handler) UploadPost(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{})
 }
+
+// GetPostsByUser cleans the id parameter and calls the PostService to get a post by based on the parameter (GET /{id})
+func (handler *Handler) GetPostsByUser(c *gin.Context) {
+	reqID := c.Query("user_profile_id")
+
+	uid := uuid.Must(uuid.Parse(reqID))
+	ctx := c.Request.Context()
+	posts, err := handler.PostService.GetAllByUserProfile(ctx, uid)
+
+	if err != nil {
+		log.Println("Unable to find posts")
+		c.JSON(http.StatusNotFound, gin.H{"error": "Post record not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"posts": posts,
+	})
+}

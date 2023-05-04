@@ -14,8 +14,13 @@ type collectionRepository struct {
 }
 
 // GetPostsInCollection implements model.CollectionRepository
-func (*collectionRepository) GetPostsInCollection(ctx context.Context, collectionID uuid.UUID) ([]model.Post, error) {
-	panic("unimplemented")
+func (repo *collectionRepository) GetPostsInCollection(ctx context.Context, collectionID uuid.UUID) ([]model.Post, error) {
+	var posts []model.Post
+	err := repo.DB.Table("public.collection_post").
+		Joins("JOIN public.post ON collection_post.post_id = post.id").
+		Where("collection_post.b_collection_id = ?", collectionID).
+		Find(&posts).Error
+	return posts, err
 }
 
 // CreateCollectionPost implements model.CollectionRepository
